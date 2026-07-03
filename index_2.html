@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>منصة النماذج الاسترشادية التفاعلية | محمود عبدالسيد</title>
+<style>
+:root{
+  --ink:#132743;
+  --ink-2:#1f3b63;
+  --paper:#faf6ee;
+  --paper-2:#f1ead9;
+  --gold:#c99a3f;
+  --gold-2:#e8c579;
+  --good:#2f7d5b;
+  --good-bg:#e5f3ec;
+  --bad:#b5453a;
+  --bad-bg:#fbe9e6;
+  --line:#e1d6bd;
+  --shadow: 0 8px 24px rgba(19,39,67,.14);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  margin:0;
+  background:
+    radial-gradient(1200px 500px at 100% -10%, #1c3253 0%, transparent 60%),
+    var(--paper);
+  color:var(--ink);
+  font-family: "Segoe UI","Tahoma","Geeza Pro","Arial",sans-serif;
+  font-size:19px;
+  line-height:1.65;
+  overscroll-behavior:none;
+}
+.eng{ direction:ltr; unicode-bidi:isolate; font-family:"Georgia","Times New Roman",serif; }
+
+/* ===== Top bar ===== */
+.topbar{
+  position:sticky; top:0; z-index:40;
+  display:flex; align-items:center; gap:10px;
+  background:linear-gradient(180deg, var(--ink) 0%, var(--ink-2) 100%);
+  color:#fdf6e6; padding:12px 14px;
+  box-shadow:var(--shadow);
+}
+.topbar .brandmark{
+  font-weight:800; font-size:17px; letter-spacing:.3px;
+  display:flex; align-items:center; gap:8px; white-space:nowrap;
+}
+.brandmark .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-2);box-shadow:0 0 8px var(--gold-2);}
+.topbar .spacer{flex:1;}
+.icon-btn{
+  background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.18);
+  color:#fdf6e6; width:42px; height:42px; border-radius:12px;
+  font-size:19px; display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:.15s;
+}
+.icon-btn:active{transform:scale(.92); background:rgba(255,255,255,.2);}
+
+/* ===== Layout ===== */
+.app{ display:flex; min-height:calc(100% - 66px); }
+.sidebar{
+  width:230px; flex:0 0 230px; background:var(--ink);
+  color:#eadfc3; padding:14px 10px 90px; transition:.25s;
+  overflow-y:auto;
+}
+.sidebar.collapsed{ width:62px; flex-basis:62px; padding:14px 6px 90px; }
+.sidebar.collapsed .test-label{ display:none; }
+.sidebar.collapsed .test-btn{ justify-content:center; padding:12px 0; }
+.side-title{ font-size:13px; opacity:.65; margin:2px 8px 10px; letter-spacing:.5px;}
+.sidebar.collapsed .side-title{ display:none; }
+.test-btn{
+  width:100%; text-align:right; display:flex; align-items:center; gap:10px;
+  background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08);
+  color:#eadfc3; padding:12px 12px; border-radius:12px; margin-bottom:8px;
+  font-size:15.5px; cursor:pointer; font-weight:600;
+}
+.test-btn .num{
+  width:28px;height:28px;border-radius:8px;background:rgba(233,197,121,.15);
+  color:var(--gold-2); display:flex;align-items:center;justify-content:center;
+  font-weight:800; flex:0 0 28px; font-size:14px;
+}
+.test-btn.active{ background:linear-gradient(90deg, var(--gold), var(--gold-2)); color:#20334f; border-color:transparent;}
+.test-btn.active .num{ background:rgba(32,51,79,.18); color:#20334f;}
+.test-btn .tag{ margin-inline-start:auto; font-size:11px; opacity:.8; }
+.test-btn.locked{ opacity:.55; }
+
+.main{ flex:1; min-width:0; padding:18px 16px 120px; }
+
+/* ===== Controls row ===== */
+.controlbar{
+  display:flex; flex-wrap:wrap; align-items:center; gap:10px;
+  background:#fff; border:1px solid var(--line); border-radius:16px;
+  padding:10px 14px; margin-bottom:16px; box-shadow:var(--shadow);
+}
+.controlbar .grp{ display:flex; align-items:center; gap:8px; font-size:14.5px; color:#5a4c2f;}
+.controlbar input[type=range]{ width:110px; accent-color:var(--gold);}
+.pill-btn{
+  border:none; border-radius:999px; padding:8px 14px; font-size:14px; font-weight:700;
+  cursor:pointer; background:var(--paper-2); color:var(--ink); border:1px solid var(--line);
+}
+.pill-btn.primary{ background:var(--ink); color:#fdf6e6; }
+
+/* ===== Test header ===== */
+.test-header{
+  background:linear-gradient(120deg, var(--ink), var(--ink-2));
+  color:#fdf6e6; border-radius:18px; padding:20px 20px; margin-bottom:18px;
+  box-shadow:var(--shadow); position:relative; overflow:hidden;
+}
+.test-header::after{
+  content:""; position:absolute; inset:0; background:
+   radial-gradient(200px 200px at 90% 0%, rgba(233,197,121,.25), transparent 70%);
+}
+.test-header h2{ margin:0 0 4px; font-size:24px; position:relative;}
+.test-header p{ margin:0; opacity:.85; font-size:14.5px; position:relative;}
+
+/* ===== Cards ===== */
+.card{
+  background:#fff; border:1px solid var(--line); border-radius:16px;
+  margin-bottom:14px; box-shadow:var(--shadow); overflow:hidden;
+}
+.card-head{
+  display:flex; align-items:center; gap:10px; padding:14px 16px 6px;
+  background:var(--paper-2);
+}
+.card-head .qnum{
+  flex:0 0 34px; height:34px; border-radius:10px; background:var(--ink);
+  color:var(--gold-2); font-weight:800; display:flex; align-items:center; justify-content:center;
+  font-size:14.5px;
+}
+.qtitle-wrap{ flex:1; display:flex; align-items:center; gap:10px; cursor:pointer; min-width:0; }
+.card-head .qtitle{ flex:1; font-weight:700; font-size:15.5px; color:#4a4023;}
+.chev{ transition:.2s; font-size:14px; opacity:.6; }
+.card.open .chev{ transform:rotate(180deg); }
+.quick-tools{
+  display:flex; gap:8px; flex-wrap:wrap; padding:2px 16px 12px; background:var(--paper-2);
+}
+.tool-btn{
+  border:1px solid var(--gold); background:#fff; color:#6b5220; border-radius:999px;
+  padding:6px 12px; font-size:13px; font-weight:700; cursor:pointer;
+}
+.tool-btn.stop{ background:var(--bad); color:#fff; border-color:var(--bad); }
+.prompt-ar{
+  display:none; margin:0 16px 12px; background:#eef3ee; border-inline-start:4px solid var(--good);
+  padding:10px 12px; border-radius:10px; font-size:16.5px; color:#274a37;
+}
+.prompt-ar.show{ display:block; }
+.mini-tr-btn{
+  border:none; background:var(--paper-2); border-radius:8px; width:26px; height:26px;
+  font-size:13px; cursor:pointer; flex:0 0 26px; margin-inline-start:6px;
+}
+.opt-body{ display:flex; align-items:flex-start; flex-wrap:wrap; gap:2px; flex:1; }
+.opt-ar{
+  display:none; width:100%; margin-top:6px; background:#eef3ee; border-radius:8px;
+  padding:6px 10px; font-size:15.5px; color:#274a37;
+}
+.opt-ar.show{ display:block; }
+.card-body{ display:none; padding:16px; }
+.card.open .card-body{ display:block; }
+
+.passage-card .card-head{ background:linear-gradient(90deg,#efe3c4,#f6efdc); }
+.passage-text{ font-size:17.5px; line-height:1.85; }
+.pseg-block{ margin-bottom:10px; }
+.pseg-en{ display:block; }
+.pseg-ar-line{
+  display:none; margin-top:5px; background:#eef3ee; border-inline-start:3px solid var(--good);
+  padding:7px 11px; border-radius:8px; font-size:15.5px; line-height:1.75; color:#274a37;
+}
+.pseg-ar-line.show{ display:block; }
+.pseg{ transition: background-color .2s ease, box-shadow .2s ease, color .2s ease; border-radius:5px; padding:1px 2px; }
+.pseg.active{ background:var(--gold-2); color:#2b2308; box-shadow:0 0 0 2px rgba(201,154,63,.45); }
+.tool-btn.active-tr{ background:var(--gold); color:#2b2308; border-color:var(--gold); }
+
+.q-prompt{ font-size:18px; margin-bottom:12px; font-weight:600;}
+.options{ display:grid; gap:9px; margin-bottom:14px; }
+.opt{
+  border:1.5px solid var(--line); border-radius:12px; padding:10px 12px;
+  display:flex; gap:10px; align-items:flex-start; font-size:16.5px;
+}
+.opt .lab{ font-weight:800; color:var(--ink-2); flex:0 0 20px; }
+.opt.correct{ border-color:var(--good); background:var(--good-bg); }
+.opt.correct .lab{ color:var(--good); }
+.opt.wrong-marked{ border-color:var(--bad); background:var(--bad-bg); opacity:.85; }
+.opt{ cursor:pointer; user-select:none; }
+.opt:active{ transform:scale(.98); }
+.opt-click{ display:flex; gap:10px; align-items:flex-start; flex:1; min-width:0; }
+.opt-speak{
+  flex:0 0 32px; width:32px; height:32px; border-radius:50%; margin-inline-start:auto;
+  border:1.5px solid var(--gold); background:#fff; color:#8a6a1f; font-size:14px;
+  display:flex; align-items:center; justify-content:center; cursor:pointer; transition:.18s;
+}
+.opt-speak:active{ transform:scale(.9); }
+.opt-speak.playing{ background:var(--gold); color:#2b2308; box-shadow:0 0 0 4px rgba(201,154,63,.25); }
+@keyframes pulseGlow{
+  0%,100%{ box-shadow:0 0 0 0 rgba(201,154,63,.38); }
+  50%{ box-shadow:0 0 0 9px rgba(201,154,63,.10); }
+}
+.opt.opt-glow{ border-color:var(--gold); background:#fffaf0; animation:pulseGlow 1s ease-in-out infinite; }
+@keyframes shakeX{
+  10%,90%{ transform:translateX(-2px); }
+  20%,80%{ transform:translateX(4px); }
+  30%,50%,70%{ transform:translateX(-7px); }
+  40%,60%{ transform:translateX(7px); }
+}
+.opt.shake-wrong{ border-color:var(--bad); background:var(--bad-bg); animation:shakeX .45s ease; }
+@keyframes correctPop{
+  0%{ transform:scale(1); }
+  35%{ transform:scale(1.035); }
+  100%{ transform:scale(1); }
+}
+.opt.correct{ animation:correctPop .45s ease; }
+.confetti-piece{
+  position:fixed; width:7px; height:10px; border-radius:2px; pointer-events:none; z-index:999;
+  animation:confettiFly .85s cubic-bezier(.2,.7,.3,1) forwards;
+}
+@keyframes confettiFly{
+  to{ transform:translate(var(--dx), var(--dy)) rotate(var(--rot)); opacity:0; }
+}
+@keyframes badgePop{
+  0%{ transform:scale(0) rotate(-15deg); opacity:0; }
+  60%{ transform:scale(1.15) rotate(6deg); opacity:1; }
+  100%{ transform:scale(1) rotate(0); opacity:1; }
+}
+.correct-badge{
+  position:fixed; z-index:1000; font-size:26px; pointer-events:none;
+  animation:badgePop .5s ease forwards, badgeFade .5s ease .5s forwards;
+}
+@keyframes badgeFade{ to{ opacity:0; transform:translateY(-25px) scale(.8); } }
+
+.reveal-btn{
+  width:100%; padding:12px; border-radius:12px; border:none; cursor:pointer;
+  background:var(--gold); color:#2b2308; font-weight:800; font-size:15.5px;
+}
+.answer-box{ margin-top:14px; border-top:2px dashed var(--line); padding-top:14px; display:none; }
+.answer-box.show{ display:block; }
+.correct-line{ font-weight:800; color:var(--good); margin-bottom:8px; font-size:16px;}
+.explain{
+  background:#fbf7ec; border-inline-start:4px solid var(--gold); border-radius:10px;
+  padding:12px 14px; font-size:16.5px; line-height:1.8; color:#3a3120;
+}
+.speak-row{ display:flex; gap:8px; margin-top:10px; }
+.speak-btn{
+  border:none; border-radius:10px; padding:9px 14px; font-size:14.5px; font-weight:700;
+  background:var(--ink); color:#fdf6e6; cursor:pointer; display:flex; align-items:center; gap:6px;
+}
+.speak-btn.stop{ background:var(--bad); }
+.model-answer{ font-size:16.5px; line-height:1.85; background:#fbf7ec; border-radius:10px; padding:14px; border-inline-start:4px solid var(--good);}
+
+.pending-wrap{
+  text-align:center; padding:60px 20px; color:#7a6c46; background:#fff;
+  border:1px dashed var(--line); border-radius:18px;
+}
+.pending-wrap .big{ font-size:44px; margin-bottom:10px;}
+
+/* ===== Brand footer (always visible, small) ===== */
+.brandbar{
+  position:fixed; bottom:12px; inset-inline:0; display:flex; justify-content:center;
+  z-index:50; pointer-events:none;
+}
+.brandbar a{
+  pointer-events:auto;
+  display:flex; align-items:center; gap:8px;
+  background:rgba(19,39,67,.92); color:#f3e6c2; text-decoration:none;
+  padding:8px 14px; border-radius:999px; font-size:13px; font-weight:700;
+  box-shadow:0 6px 18px rgba(0,0,0,.35); border:1px solid rgba(233,197,121,.4);
+  backdrop-filter:blur(4px);
+}
+.brandbar .sep{ opacity:.5; }
+
+@media (max-width:640px){
+  body{font-size:17.5px;}
+  .sidebar{ position:fixed; inset-inline-start:0; top:66px; bottom:0; z-index:45; width:230px;
+    transform:translateX(105%); box-shadow:-10px 0 30px rgba(0,0,0,.35); }
+  html[dir="rtl"] .sidebar{ transform:translateX(105%); }
+  .sidebar.mobile-open{ transform:translateX(0); }
+  .sidebar.collapsed{ transform:translateX(105%); }
+  .backdrop{ display:none; position:fixed; inset:66px 0 0 0; background:rgba(10,16,28,.45); z-index:40; }
+  .backdrop.show{ display:block; }
+  .main{ padding:14px 10px 120px; }
+  .test-header h2{ font-size:20px; }
+}
+:focus-visible{ outline:3px solid var(--gold); outline-offset:2px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <button class="icon-btn" id="sidebarToggle" aria-label="طي القائمة">☰</button>
+  <div class="brandmark"><span class="dot"></span> منصة النماذج الاسترشادية</div>
+  <div class="spacer"></div>
+  <button class="icon-btn" id="fullscreenBtn" aria-label="ملء الشاشة">⛶</button>
+</div>
+
+<div class="app">
+  <div class="backdrop" id="backdrop"></div>
+  <nav class="sidebar" id="sidebar">
+    <div class="side-title">النماذج العشرة</div>
+    <div id="testList"></div>
+  </nav>
+
+  <main class="main">
+    <div class="controlbar">
+      <div class="grp">🔊 سرعة الصوت
+        <input type="range" id="rateSlider" min="0.5" max="1.8" step="0.1" value="0.95">
+        <span id="rateVal">0.95x</span>
+      </div>
+      <div class="grp">🗣️ نبرة الشرح
+        <select id="voiceSelect" class="pill-btn" style="font-size:13px;"></select>
+      </div>
+      <button class="pill-btn" id="expandAll">فتح الكل</button>
+      <button class="pill-btn" id="collapseAll">طي الكل</button>
+      <button class="pill-btn primary" id="stopSpeak">⏹ إيقاف الصوت</button>
+    </div>
+
+    <div id="content"></div>
+  </main>
+</div>
+
+<div class="brandbar">
+  <a href="tel:01002811095">👨‍🏫 برمجة: محمود عبدالسيد <span class="sep">|</span> 📞 01002811095</a>
+</div>
+
+<script>
+/* ============ DATA ============ */
+const TESTS_META = [
+  {id:1, title:"النموذج الأول", ready:true},
+  {id:2, title:"النموذج الثاني", ready:true},
+  {id:3, title:"النموذج الثالث", ready:false},
+  {id:4, title:"النموذج الرابع", ready:false},
+  {id:5, title:"النموذج الخامس", ready:false},
+  {id:6, title:"النموذج السادس", ready:false},
+  {id:7, title:"النموذج السابع", ready:false},
+  {id:8, title:"النموذج الثامن", ready:false},
+  {id:9, title:"النموذج التاسع", ready:false},
+  {id:10, title:"النموذج العاشر", ready:false},
+];
+
+const PASSAGE_1 = `A few years ago, while I was on holiday in Sinai near Saint Catherine, I stopped for the night in a small desert village.
+It was a poor place, and there was no real hotel, but the owner of a local restaurant, Mr. Hassan, kindly offered me a bed for the night.
+"Please wait here," he said, pointing to a wooden table outside.
+"I'll prepare your room."
+The evening was beautiful.
+The sun was setting behind the rugged mountains, and the stars were just beginning to appear.
+Families were lighting small fires to cook their evening meals, and the pleasant smell of wood smoke filled the cool desert air.
+Then I realized I was no longer alone.
+An old man with a long white beard had quietly sat at the table beside me.
+His clothes were dusty and almost in rags.
+"How can I help you?" I asked.
+"Let me tell your fortune, sir," he said.
+I laughed.
+"I don't believe in that kind of thing."
+But he gently held my hand and refused to let go.
+"Very well," I said.
+"First, tell me about my past.
+If you can do that, I'll let you talk about the future."
+He read my palm lines in silence and then began to describe my childhood in Alexandria, my family, and even places where I had lived and worked in other cities.
+Every word was true!
+"Stop!" I cried.
+"How do you know all this?"
+"I know about the past, the present, and even the future," he whispered.
+"Do you want to hear it?"
+I hesitated.
+Just then, Mr. Hassan returned.
+"Your room is ready, sir.
+Were you talking to someone?"
+I looked around, but the old man had vanished.
+The owner smiled, "Oh, that must be Mahmoud, the village mysterious man.
+He always thinks he can tell fortunes!"`;
+
+const PASSAGE_1_AR = `منذ عدة سنوات، بينما كنت في عطلة في سيناء بالقرب من سانت كاترين، توقفت لأمضي الليلة في قرية صغيرة في الصحراء.
+كان مكانًا فقيرًا، ولم يكن هناك فندق حقيقي، لكن صاحب أحد المطاعم المحلية، السيد حسن، عرض عليّ بلطف سريرًا لأنام فيه تلك الليلة.
+"من فضلك انتظر هنا،" قال، مشيرًا إلى طاولة خشبية بالخارج.
+"سأجهّز لك الغرفة."
+كان المساء جميلاً.
+كانت الشمس تغرب خلف الجبال الوعرة، وبدأت النجوم في الظهور.
+كانت العائلات تشعل نيرانًا صغيرة لطهي وجبتها المسائية، وامتلأ هواء الصحراء البارد برائحة دخان الخشب الممتعة.
+ثم أدركت أنني لم أعد وحدي.
+كان رجل عجوز ذو لحية بيضاء طويلة قد جلس بهدوء على الطاولة بجواري.
+كانت ملابسه مغبرّة وشبه ممزقة.
+"كيف يمكنني مساعدتك؟" سألته.
+"دعني أخبرك بطالعك يا سيدي،" قال.
+ضحكت.
+"أنا لا أؤمن بهذا النوع من الأشياء."
+لكنه أمسك يدي برفق ورفض أن يتركها.
+"حسنًا،" قلت.
+"أولاً، أخبرني عن ماضيّ.
+إن استطعت فعل ذلك، سأدعك تتحدث عن المستقبل."
+قرأ خطوط كفّي في صمت، ثم بدأ يصف طفولتي في الإسكندرية، وعائلتي، وحتى الأماكن التي عشت وعملت فيها في مدن أخرى.
+كانت كل كلمة صحيحة!
+"توقف!" صرخت.
+"كيف تعرف كل هذا؟"
+"أنا أعرف الماضي والحاضر بل وحتى المستقبل،" همس.
+"هل تريد أن تسمعه؟"
+ترددت.
+وفي تلك اللحظة، عاد السيد حسن.
+"غرفتك جاهزة يا سيدي.
+هل كنت تتحدث مع أحد؟"
+نظرت حولي، لكن الرجل العجوز قد اختفى.
+ابتسم صاحب المطعم وقال: "أوه، لا بد أنه محمود، رجل القرية الغامض.
+إنه دائمًا يظن أنه يستطيع قراءة الطالع!"`;
+
+const PASSAGE_2 = `In recent decades, the world has faced serious environmental challenges such as climate change, air pollution, and the depletion of natural resources.
+As a result, many countries have turned to renewable energy sources as a sustainable solution for the future.
+Renewable energy comes from natural sources that are continuously renewed, such as sunlight, wind, water, and geothermal heat.
+Unlike fossil fuels, these sources do not produce harmful greenhouse gases when used to generate electricity.
+One of the most popular forms of renewable energy is solar power.
+Solar panels capture sunlight and convert it into electricity through a process known as the photovoltaic effect.
+The cost of solar technology has dropped significantly over the past decade, making it more accessible to homes and businesses.
+Another important source is wind energy, produced when turbines convert the movement of air into mechanical power.
+Wind farms, both on land and at sea, now supply a large portion of electricity in many European countries.
+Hydropower, which uses flowing water to generate electricity, remains one of the oldest and most reliable energy sources.
+In addition, geothermal energy, which harnesses heat from beneath the Earth's surface, provides a steady source of power in countries such as Iceland and New Zealand.
+However, renewable energy also faces challenges.
+Solar and wind power depend on weather conditions, while building large dams for hydropower can affect local ecosystems.
+To overcome these issues, scientists are working on advanced energy storage systems and more efficient technologies.
+Despite these challenges, renewable energy offers a path to a cleaner, healthier planet.
+By investing in sustainable solutions today, we can protect our environment and ensure that future generations enjoy a safe and prosperous world.`;
+
+const PASSAGE_2_AR = `في العقود الأخيرة، واجه العالم تحديات بيئية خطيرة مثل التغير المناخي، وتلوث الهواء، واستنزاف الموارد الطبيعية.
+ونتيجة لذلك، لجأت العديد من الدول إلى مصادر الطاقة المتجددة باعتبارها حلاً مستدامًا للمستقبل.
+تأتي الطاقة المتجددة من مصادر طبيعية تتجدد باستمرار، مثل ضوء الشمس والرياح والماء والحرارة الأرضية.
+وخلافًا للوقود الأحفوري، لا تُنتج هذه المصادر غازات دفيئة ضارة عند استخدامها لتوليد الكهرباء.
+من أكثر أشكال الطاقة المتجددة شيوعًا الطاقة الشمسية.
+تلتقط الألواح الشمسية ضوء الشمس وتحوّله إلى كهرباء من خلال عملية تُعرف بالتأثير الكهروضوئي.
+وقد انخفضت تكلفة تقنية الطاقة الشمسية بشكل كبير خلال العقد الماضي، مما جعلها في متناول المنازل والشركات أكثر.
+ومصدر مهم آخر هو طاقة الرياح، التي تُنتَج عندما تحوّل التوربينات حركة الهواء إلى طاقة ميكانيكية.
+وتُزوّد مزارع الرياح، سواء على اليابسة أو في البحر، جزءًا كبيرًا من الكهرباء في العديد من الدول الأوروبية الآن.
+تظل الطاقة المائية، التي تستخدم تدفق الماء لتوليد الكهرباء، واحدة من أقدم مصادر الطاقة وأكثرها موثوقية.
+بالإضافة إلى ذلك، توفّر الطاقة الحرارية الأرضية، التي تستغل الحرارة من باطن الأرض، مصدرًا ثابتًا للطاقة في دول مثل آيسلندا ونيوزيلندا.
+ومع ذلك، تواجه الطاقة المتجددة أيضًا تحديات.
+فالطاقة الشمسية وطاقة الرياح تعتمدان على أحوال الطقس، في حين يمكن أن يؤثر بناء السدود الكبيرة لتوليد الطاقة المائية على النظم البيئية المحلية.
+وللتغلب على هذه المشكلات، يعمل العلماء على تطوير أنظمة تخزين طاقة متقدمة وتقنيات أكثر كفاءة.
+ورغم هذه التحديات، تفتح الطاقة المتجددة الطريق نحو كوكب أنظف وأكثر صحة.
+فمن خلال الاستثمار في الحلول المستدامة اليوم، يمكننا حماية بيئتنا وضمان تمتع الأجيال القادمة بعالم آمن ومزدهر.`;
+
+const PASSAGE_3 = `Every year, thousands of accidents occur simply because drivers lose focus for a few seconds.
+One morning last year a man was driving through the center of the town, distracted by the shops.
+Suddenly a pedestrian stepped off the pavement and was struck by the car.
+The impact threw the person onto the bonnet before falling onto the road, where a faint trace of blood marked the dust- a heart breaking and distressing reminder of the accident.
+A few minutes later, the police arrived and made a report.
+"One person killed, one car damaged in road accident."
+However, who was the victim?
+A mother out shopping, a father returning from work, or a student on her way to university?
+This was one of many tragedies that could have been avoided if people had followed three simple rules: first, concentrate; second, think ahead and third, use clear signals to communicate their intentions to others.
+A driver loses control whenever attention drifts — whether to the scenery, to conversation, or to thoughts unrelated to driving.
+To avoid accidents, drivers should anticipate potential dangers — not only reacting to what is happening but also predicting what might occur next.
+Finally, drivers must clearly warn other road users of their presence and intentions.
+If they turn, change lanes, or overtake without signaling or giving proper warning, they may at best alarm others or at worst, cause a fatal accident.
+Responsible driving depends on three essential habits: concentration, foresight, and communication.
+Following these simple principles can prevent countless tragedies.`;
+
+const PASSAGE_3_AR = `تحدث آلاف الحوادث كل عام لمجرد أن السائقين يفقدون تركيزهم لبضع ثوانٍ.
+في صباح أحد الأيام العام الماضي، كان رجل يقود سيارته عبر وسط المدينة، وقد شتّت انتباهه واجهات المحلات.
+وفجأة نزل أحد المارة عن الرصيف فصدمته السيارة.
+ألقى الاصطدام بالشخص فوق غطاء محرك السيارة قبل أن يسقط على الطريق، حيث تركت آثار دم خفيفة أثرًا على الغبار - تذكارًا مؤلمًا ومحزنًا للحادث.
+وبعد دقائق قليلة، وصلت الشرطة وحرّرت محضرًا.
+"مقتل شخص وتضرر سيارة في حادث طريق."
+لكن من كانت الضحية؟
+أمّ خرجت للتسوق، أم أب عائد من عمله، أم طالبة في طريقها إلى الجامعة؟
+كانت هذه واحدة من مآسٍ كثيرة كان يمكن تجنّبها لو التزم الناس بثلاث قواعد بسيطة: أولًا، التركيز؛ ثانيًا، التفكير المسبق؛ وثالثًا، استخدام إشارات واضحة لإبلاغ الآخرين بنواياهم.
+يفقد السائق السيطرة كلما شرد انتباهه - سواء إلى المناظر المحيطة، أو الحديث، أو أفكار لا علاقة لها بالقيادة.
+لتجنّب الحوادث، يجب على السائقين توقّع الأخطار المحتملة - أي ألا يكتفوا برد الفعل تجاه ما يحدث بل يتنبأوا أيضًا بما قد يحدث لاحقًا.
+وأخيرًا، يجب على السائقين تحذير مستخدمي الطريق الآخرين بوضوح من وجودهم ونواياهم.
+فإذا انعطفوا أو غيّروا المسار أو تجاوزوا دون إشارة أو تحذير مناسب، فقد يُفزعون الآخرين في أحسن الأحوال، أو يتسببون في حادث مميت في أسوأها.
+تعتمد القيادة المسؤولة على ثلاث عادات أساسية: التركيز، والتبصّر، والتواصل.
+اتباع هذه المبادئ البسيطة يمكن أن يمنع مآسٍ لا حصر لها.`;
+
+const PASSAGE_4 = `I knew that the first scene of 'Macbeth' happened during a thunderstorm, so I was not surprised when bright lights and loud noises filled the theatre.
+The next scene was quieter.
+Old king Duncan came on and he heard from a soldier how bravely Macbeth had been fighting against enemies of the king.
+Duncan did not know yet that Macbeth was going to kill him, and I was not going to tell him because then they would have to change the play.
+While I was thinking about this, I noticed a man in strange clothes standing in the aisle next to me.
+I assumed he had come late and was waiting to get to his seat.
+"Excuse me," I whispered, "Do you want to get past? Is your seat in this row?"
+The strangely dressed man did not answer.
+I stood up and said "Excuse me!" a little louder.
+"Sit down!" said the person sitting behind me.
+"God save the king!" The man in the aisle shouted suddenly and ran towards the stage.
+That was embarrassing, as I suddenly understood why he had not said anything.
+He was in the play!
+Oh, dear, I wanted to hide under my seat.
+At the end of the third act there were lots of battles and fights, then there was an interval.
+"Very good," said Dad. "Very interesting." "Isn't it exciting?" said Mum.
+Dina was too busy with an ice-cream.
+After the interval people came into the play from every part of the theatre.
+In one battle scene soldiers were running all over the place fighting all the time.
+It was fantastic.
+"Wasn't it great?" said Dina in the taxi on the way home.
+"Hani, why don't you become an actor? You'd be good."
+We all laughed.
+"No, Dina, I wouldn't like acting," I answered.`;
+
+const PASSAGE_4_AR = `عرفت أن المشهد الأول من مسرحية "ماكبث" يقع أثناء عاصفة رعدية، فلم أُفاجأ عندما ملأت الأضواء الساطعة والأصوات العالية المسرح.
+كان المشهد التالي أكثر هدوءًا.
+دخل الملك العجوز دنكان وسمع من أحد الجنود كيف قاتل ماكبث بشجاعة ضد أعداء الملك.
+لم يكن دنكان يعلم بعد أن ماكبث سيقتله، ولم أكن سأخبره لأنهم سيضطرون حينها لتغيير المسرحية.
+وبينما كنت أفكر في هذا، لاحظت رجلاً بملابس غريبة واقفًا في الممر بجانبي.
+ظننت أنه وصل متأخرًا وينتظر الوصول إلى مقعده.
+همست قائلاً: "المعذرة، هل تريد المرور؟ هل مقعدك في هذا الصف؟"
+لم يجب الرجل غريب الملابس.
+وقفت وقلت "المعذرة!" بصوت أعلى قليلاً.
+قال الشخص الجالس خلفي: "اجلس!"
+صرخ الرجل في الممر فجأة "ليحفظ الله الملك!" وركض نحو المسرح.
+كان هذا محرجًا، إذ أدركت فجأة سبب عدم رده عليّ.
+لقد كان ممثلاً في المسرحية!
+يا للأسف، تمنيت لو اختبأت تحت مقعدي.
+في نهاية الفصل الثالث كانت هناك معارك وقتالات كثيرة، ثم جاءت فترة الاستراحة.
+قال أبي: "جيد جدًا"، وقالت أمي: "ممتع جدًا، أليست مثيرة؟"
+كانت دينا منشغلة جدًا بتناول الآيس كريم.
+بعد الاستراحة عاد الناس إلى المسرحية من كل أنحاء المسرح.
+في أحد مشاهد المعارك كان الجنود يركضون في كل مكان ويتقاتلون طوال الوقت.
+كان الأمر رائعًا.
+قالت دينا في سيارة الأجرة في طريق العودة للمنزل: "أليس هذا رائعًا؟"
+"يا هاني، لماذا لا تصبح ممثلاً؟ ستكون بارعًا."
+ضحكنا جميعًا.
+أجبت: "لا يا دينا، لن يعجبني التمثيل."`;
+
+function mcq(id, prompt, options, correct, explain, passageId){
+  return {id, type:"mcq", prompt, options, correct, explain, passageId};
+}
+
+const TEST_1_QUESTIONS = [
+  mcq(1,"Educational projects often support ............. groups who lack equal opportunities.",
+    {a:"popular", b:"central", c:"powerful", d:"marginalized"}, "d",
+    "الكلمة الصحيحة marginalized بمعنى (مهمّشة)؛ فالمشروعات التعليمية تدعم الفئات المهمّشة التي تفتقر إلى تكافؤ الفرص."),
+  mcq(2,"Don't ............. the difficulty of this exam; it's very challenging.",
+    {a:"understand", b:"underline", c:"underestimate", d:"undertake"}, "c",
+    "الفعل underestimate يعني (يقلل من شأن / يستهين بـ)، وهو المناسب في سياق عدم التهاون مع صعوبة الامتحان."),
+  mcq(3,"The sky was ............., so we could not see the sun.",
+    {a:"overcast", b:"bright", c:"sunny", d:"vague"}, "a",
+    "overcast تعني (ملبّدة بالغيوم)، وهذا ما يفسّر عدم القدرة على رؤية الشمس."),
+  mcq(4,"The baby began to ............. loudly when it was hungry.",
+    {a:"whisper", b:"moan", c:"laugh", d:"clap"}, "b",
+    "moan تعني (يئنّ / يتأوّه)، وهو الفعل المناسب لوصف بكاء الرضيع بصوت عالٍ من الجوع."),
+  mcq(5,"The chicks are ............. from their eggs now.",
+    {a:"hatching", b:"catching", c:"watching", d:"matching"}, "a",
+    "hatch تعني (يفقس)، وهي مناسبة لوصف خروج الكتاكيت من بيضها."),
+  mcq(6,"Cars ……………… harmful gas emissions that pollute the air.",
+    {a:"produce", b:"introduce", c:"deduce", d:"misuse"}, "a",
+    "الفعل produce (ينتج) هو المناسب لوصف السيارات وهي تُصدر انبعاثات ضارة تلوّث الهواء."),
+  mcq(7,"When we went out, it was …………… cats and dogs.",
+    {a:"watching", b:"dropping", c:"playing", d:"raining"}, "d",
+    "التعبير الاصطلاحي raining cats and dogs يعني (تمطر بغزارة شديدة)."),
+  mcq(8,"We …………………. dinner at 8 p.m. yesterday.",
+    {a:"have", b:"had had", c:"were having", d:"has"}, "c",
+    "الحدث كان مستمرًا في وقت محدد بالماضي (الساعة الثامنة مساءً)، لذا نستخدم الماضي المستمر were having."),
+  mcq(9,"He wants to study at ……………..University of Oxford.",
+    {a:"a", b:"an", c:"the", d:"no article"}, "c",
+    "نتحدث هنا عن مكان معرَّف ومشهور بالتحديد (University of Oxford)، لذا نستخدم أداة التعريف the."),
+  mcq(10,'Which is the correct reported speech of: She said, "I am tired."',
+    {a:"She said that she was tired.", b:"She said that she is tired.", c:"She said she will be tired.", d:"She said she had been tired."}, "a",
+    "عند تحويل الجملة إلى الكلام غير المباشر (Reported Speech) يتغيّر الزمن من المضارع البسيط (am) إلى الماضي البسيط (was)."),
+  mcq(11,"We were robbed as I remembered not ………… the door.",
+    {a:"locking", b:"to lock", c:"locked", d:"lock"}, "a",
+    "الشخص هنا يتذكّر أنه لم يقفل الباب، والحدث وقع بالفعل في الماضي، لذا نستخدم remember + not + الفعل بصيغة ing (locking) للتعبير عن فعل تم تذكّره بعد وقوعه فعليًا."),
+
+  mcq(12,"What is the central idea of the story?",
+    {a:"The narrator's holiday in Saint Catherine was boring.", b:"The narrator's holiday took an unexpected turn.", c:"The restaurant owner prepared a delicious meal.", d:"A horrible holiday the narrator would always remember."}, "b",
+    "الفكرة المحورية للقصة أن عطلة الراوي أخذت منحى غير متوقع بلقائه بالرجل الغامض الذي تنبأ بماضيه بدقة ثم اختفى فجأة.", "p1"),
+  mcq(13,"Where did the narrator first meet the old man?",
+    {a:"Inside his hotel room", b:"In the restaurant kitchen", c:"Outside the restaurant", d:"In the village market"}, "c",
+    "أشار صاحب المطعم للراوي بالانتظار عند طاولة خشبية بالخارج (outside)، وهناك جلس الرجل العجوز بجواره.", "p1"),
+  mcq(14,"What did the restaurant owner call the old man?",
+    {a:"A fortune-teller", b:"The village mysterious man", c:"A holy man", d:"A tourist guide"}, "b",
+    "وصف صاحب المطعم الرجل العجوز في نهاية القصة بأنه 'رجل القرية الغامض' (the village mysterious man).", "p1"),
+  mcq(15,"Which can summarize the middle part of the story (the meeting with the old man)?",
+    {a:"The narrator met an old man who accurately told him about his past and claimed to know the future.", b:"The narrator stayed in a hotel where a kind owner prepared his room and made his dinner.", c:"The narrator spent the evening watching the sunset and smelling the wood smoke.", d:"The narrator believed in fortune-telling and asked the old man to predict his future."}, "a",
+    "يلخّص الجزء الأوسط من القصة لقاء الراوي بالرجل العجوز الذي أخبره بدقة عن ماضيه وادّعى معرفة المستقبل أيضًا.", "p1"),
+  mcq(16,"The event that changes the narrator's opinion about the old man is when…",
+    {a:"he offered to tell the future", b:"the restaurant owner returned", c:"he revealed the narrator's past", d:"the old man disappeared"}, "c",
+    "ما غيّر رأي الراوي في الرجل العجوز هو كشفه الدقيق لتفاصيل ماضيه، حيث تأكد الراوي أن 'كل كلمة كانت صحيحة'.", "p1"),
+  mcq(17,"When the old man described the narrator's childhood, he was………",
+    {a:"angry and disappointed", b:"excited but shocked", c:"entertained but terrified", d:"doubtful and nervous"}, "b",
+    "عندما وصف الرجل العجوز طفولة الراوي بدقة، شعر الراوي بمزيج من الحماس والصدمة، فصرخ متسائلًا 'كيف عرفت كل هذا؟'.", "p1"),
+  mcq(18,"Throughout the story the narrator's feelings towards the old man changed from……",
+    {a:"fear to anger", b:"disbelief to surprise", c:"respect to hatred", d:"sadness to happiness"}, "b",
+    "تغيّرت مشاعر الراوي طوال القصة من عدم التصديق (ضحك ولم يُصدّق في البداية) إلى الدهشة الشديدة بعد أن أثبت الرجل صحة كلامه.", "p1"),
+  mcq(19,"What is the most likely reason the old man disappeared before Mr. Hassan returned?",
+    {a:"He didn't want Mr. Hassan to see him.", b:"He was a traveler who left to find food.", c:"He was only in the narrator's imagination.", d:"He went to get the narrator's room ready."}, "a",
+    "الأرجح أن الرجل العجوز لم يرغب في أن يراه السيد حسن وهو يتحدث مع الزائر، فاختفى بهدوء فور اقتراب عودته. والدليل أن صاحب المطعم يعرفه جيدًا ويذكر اسمه (محمود) ويصفه بأنه 'رجل القرية الغامض الذي يظن دائمًا أنه يستطيع قراءة الطالع'، مما يؤكد أنه شخص حقيقي معروف في القرية وليس مجرد خيال من نسج الراوي.", "p1"),
+
+  mcq(20,"The main idea of the text is that renewable energy …………….. .",
+    {a:"is too costly to be practical", b:"can replace fossil fuels in a sustainable way", c:"harms the environment", d:"is only used in Europe"}, "b",
+    "الفكرة الرئيسية للنص أن الطاقة المتجددة يمكن أن تحل محل الوقود الأحفوري بطريقة مستدامة وصديقة للبيئة.", "p2"),
+  mcq(21,"Based on paragraph 1, what does the writer indirectly encourage readers to do about resource depletion?",
+    {a:"Ignore it because it is a natural process.", b:"Recognize how serious it is and take action to stop it.", c:"Assume that it will solve itself over time.", d:"Think it only affects scientists and not ordinary people."}, "b",
+    "يشجّع الكاتب ضمنيًا القارئ على إدراك خطورة استنزاف الموارد الطبيعية والتحرك لاتخاذ إجراء لوقفه.", "p2"),
+  mcq(22,"Which form of energy is produced from sunlight?",
+    {a:"Hydropower", b:"Wind energy", c:"Solar power", d:"Geothermal energy"}, "c",
+    "الطاقة الشمسية (Solar power) هي التي تُنتَج مباشرة من ضوء الشمس عبر التأثير الكهروضوئي.", "p2"),
+  mcq(23,"According to the text, what is one problem with renewable energy?",
+    {a:"It depends on weather conditions", b:"It causes air pollution", c:"It cannot produce electricity", d:"It is more harmful than fossil fuels"}, "a",
+    "من مشكلات الطاقة المتجددة أنها تعتمد على أحوال الطقس، مثل ضوء الشمس وسرعة الرياح.", "p2"),
+  mcq(24,"The tone of the passage is mostly ……………….. .",
+    {a:"critical", b:"humorous", c:"emotional", d:"informative"}, "d",
+    "أسلوب النص إخباري/معلوماتي (informative) لأنه يقدّم معلومات وحقائق علمية عن الطاقة المتجددة دون انحياز أو سخرية.", "p2"),
+  mcq(25,"Based on the passage, what can we infer about the future of renewable energy?",
+    {a:"It will be replaced by fossil fuels", b:"It will likely continue to grow", c:"It will disappear soon", d:"It is not supported by governments"}, "b",
+    "يمكن أن نستنتج من سياق النص أن الطاقة المتجددة ستستمر على الأرجح في النمو والانتشار مستقبلًا.", "p2"),
+  mcq(26,"According to the passage, which country is mentioned as using geothermal energy?",
+    {a:"France", b:"Iceland", c:"Egypt", d:"Japan"}, "b",
+    "ذُكرت آيسلندا (Iceland) صراحةً في النص كمثال على دولة تستخدم الطاقة الحرارية الأرضية (geothermal energy).", "p2"),
+  mcq(27,"Which statement summarizes paragraph 2 of the passage?",
+    {a:"It explains how solar and wind energy convert natural resources into electricity and are becoming more common.", b:"It argues that solar energy remains too costly for most people to install or maintain.", c:"It describes how hydropower is the oldest and most reliable energy source still used in many countries today.", d:"It focuses on the environmental problems caused by burning fossil fuel for electricity."}, "a",
+    "الفقرة الثانية تتحدث تحديدًا عن الطاقة الشمسية وطاقة الرياح وكيفية تحويلهما إلى كهرباء وانتشارهما المتزايد.", "p2"),
+
+  mcq(28,'"While we watched TV, the phone rang." Which of the following corrects the mistake in this sentence?',
+    {a:"While → after", b:"rang → was ringing", c:"While → before", d:"watched → were watching"}, "d",
+    "حدث مستمر (مشاهدة التلفاز) قطعه حدث آخر مفاجئ (رنين الهاتف)، لذا يجب أن يكون الفعل الأول في صيغة الماضي المستمر: were watching. راجع قاعدة while + الماضي المستمر لوصف حدث مستمر قطعه حدث آخر."),
+  mcq(29,"Which sentence is correctly punctuated?",
+    {a:"Many students who studied hard passed the exam.", b:"Many students who studied hard, passed the exam.", c:"Many students, who studied hard, passed the exam.", d:"Many students; who studied hard; passed the exam."}, "a",
+    "جملة الوصل (who studied hard) هنا تقييدية تحدّد بالضبط أيّ الطلاب نجحوا، وهي معلومة أساسية للمعنى؛ لذا لا توضع فواصل قبلها أو بعدها."),
+  mcq(30,"Which of the following sentences contains a relative clause?",
+    {a:"I don't know where she lives.", b:"He runs faster than me.", c:"The book that you gave me is interesting.", d:"She went home when she was tired."}, "c",
+    "جملة الوصل الموصولة (that you gave me) تصف The book، وهذا هو المثال الوحيد الذي يحتوي فعليًا على relative clause."),
+  mcq(31,'Choose the correct reported form: She said, "Had I known he was coming, I would have prepared something special."',
+    {a:"She said if she had known he was coming, she would prepare something special.", b:"She said that if she had known he was coming, she would have prepared something special.", c:"She said that had she known he was coming, she prepared something special.", d:"She said she had known he was coming, and she would have prepared something."}, "b",
+    "الجملة الأصلية Had I known = صيغة مقلوبة لجملة الشرط الثالث if she had known. عند نقلها للكلام غير المباشر تصبح: she said that if she had known..., she would have prepared something special، مع بقاء صيغة النتيجة would have + p.p. كما هي."),
+  mcq(32,"Which sentence shows an action interrupted by another action?",
+    {a:"I finished my work early but I didn't go out.", b:"He washed the car and set off.", c:"I was cooking when the lights went out.", d:"I was revising the reports as Ali was trying to fix the machine."}, "c",
+    "الجملة تصف حدثًا مستمرًا (كان يطبخ) قطعه حدث مفاجئ آخر في لحظة محددة (انقطعت الكهرباء)، وهذا هو المعنى الدقيق لـ'فعل قطعه فعل آخر'؛ أما الخيار (d) فيصف فعلين مستمرين متزامنين وليس مقاطعة."),
+  mcq(33,"Which sentence is correctly structured?",
+    {a:"Running through the park, the rain started to fall.", b:"Running through the park, I saw the rain starting to fall.", c:"The rain started to fall, running through the park.", d:"Running through the park, raining was started."}, "b",
+    "عند حذف الفاعل من الجملة الأولى (Running through the park)، يجب أن يبدأ فاعل الجملة الثانية بنفس فاعل الجملة الأولى؛ لأن (I) هو من كان يجري ورأى المطر يبدأ في الهطول، بخلاف باقي الخيارات التي بها تعليق خاطئ للفاعل (dangling participle)."),
+  mcq(34,'She doesn\'t usually drink coffee, but she does enjoy a cup in the morning sometimes. What is the function of "does"?',
+    {a:"Auxiliary for forming questions", b:"Modal of ability", c:"Contrastive conjunction", d:"Emphatic"}, "d",
+    "استخدام do/does/did متبوعة بالمصدر في الجملة المثبتة هنا غرضه التوكيد (Emphatic use)، تمامًا مثل: I do like reading books / He did leave early / She does play tennis."),
+  mcq(35,"The manager had the report checked before sending it to the director. What does this sentence mean?",
+    {a:"The manager checked the report personally.", b:"Someone else checked the report for the manager.", c:"The manager forgot to check the report.", d:"The report was not checked at all."}, "b",
+    "تركيب have + object + p.p. (had the report checked) هو صيغة السببية المبنية للمجهول (Passive Causative)، ومعناها أن شخصًا آخر قام بفحص التقرير نيابةً عن المدير، وليس المدير نفسه."),
+
+  {id:36, type:"translate", prompt:"Although artificial intelligence can write, paint, and compose music, many people believe it can never replace human creativity. Will the future prove them right or wrong?",
+    dirType:"ar", options:{
+      a:"على الرغم من أن الذكاء الاصطناعي يمكنه أن يكتب ويرسم ويؤلف الموسيقى، إلا أن كثيرًا من الناس يعتقدون أنه لن يستطيع أبدًا أن يحل محل الإبداع البشري. فهل سيثبت المستقبل أنهم على حق أم على خطأ؟",
+      b:"رغم أن الذكاء الاصطناعي يستطيع الكتابة أو الرسم أو تلحين الموسيقى، إلا أن بعض الناس يظنون أنه أفضل من الإبداع البشري. فهل سيثبت المستقبل أنهم محقون؟",
+      c:"بالرغم من قدرة الذكاء الاصطناعي على الكتابة والرسم وتلحين الموسيقى، يرى البعض أنه يمكن أن يحل محل بعض أشكال الذكاء البشري في المستقبل.",
+      d:"رغم أن الذكاء الاصطناعي يمكنه الكتابة والرسم وتأليف الموسيقى، يرى بعض الناس أنه من الخطأ أنه سيحل محل الإبداع البشري في المستقبل."},
+    correct:"a", explain:"الترجمة (أ) هي الأدق والأشمل لمعنى الجملة الإنجليزية الأصلية دون أي زيادة أو نقص أو تحريف في المعنى (خاصة فكرة 'لن يحل محل الإبداع البشري' و'هل سيثبت المستقبل صحة رأيهم')، بينما تحرّف بقية الخيارات هذا المعنى بشكل أو بآخر."},
+  {id:37, type:"translate", prompt:"Online learning provides students with great flexibility, but it also requires strong self-discipline and time management skills. Can technology ever replace real classrooms?",
+    dirType:"ar", options:{
+      a:"يوفر التعلم عبر الإنترنت للطلاب مرونة كبيرة، لكنه يتطلب أيضًا انضباطًا ذاتيًا قويًا ومهارات في إدارة الوقت. فهل يمكن للتكنولوجيا أن تحل محل الفصول الدراسية الحقيقية؟",
+      b:"التعلم عبر الإنترنت لا يمنح الطلاب أي حرية، بل يجعلهم أقل انضباطًا وأكثر فوضى في استخدام وقتهم.",
+      c:"الدراسة عبر الإنترنت سهلة جدًا، ولا تحتاج إلى أي جهد أو تنظيم من جانب الطلاب.",
+      d:"يوفر التعليم عبر الإنترنت مرونة تامة للطلاب، ولا يحتاجون بعد الآن إلى حضور أي فصول دراسية في حياتهم."},
+    correct:"a", explain:"الترجمة (أ) تنقل المعنى الأصلي بدقة كاملة: المرونة الكبيرة، وضرورة الانضباط الذاتي وإدارة الوقت، والتساؤل عن قدرة التكنولوجيا على استبدال الفصول الحقيقية؛ بينما تحرّف باقي الخيارات المعنى المقصود أو تحذف جزءًا أساسيًا منه."},
+  {id:38, type:"translate", prompt:"على الرغم من التقدم العلمي الهائل، إلا أن الكون ما زال يحتفظ بالكثير من الأسرار التي يعجز العلماء عن تفسيرها مثل مثلث برمودا والثقوب السوداء. فهل سيأتي اليوم الذي نكتشف فيه أن هناك أماكن أخرى يوجد فيها حياة مثل التي نعيش فيها؟",
+    dirType:"en", options:{
+      a:"Despite the tremendous scientific progress, the universe still holds many secrets that scientists cannot explain, such as the Bermuda Triangle and black holes. Will the day come when we discover that there are other places where life exists, similar to the one we live in?",
+      b:"Although the huge scientific progress, the universe still holds many secrets that scientists cannot explain, such as the Bermuda Triangle and black holes. Will the day come when we discover that there is other places where life exists, similar to the one we live in?",
+      c:"Although the tremendous science progress, the universe still hold many secrets that scientists cannot explain, such as the Bermuda Triangle and black holes. Will the day come when we discover that there are other places where life exists, similar to the one we live in?",
+      d:"Despite the huge science progress, the universe still hold many secrets that scientists cannot explain, such as the Bermuda Triangle and black holes. Will the day come when we discover that there are other places where life exists, similar to the one we live in?"},
+    correct:"a", explain:"الترجمة (أ) هي الصحيحة نحويًا بالكامل: تستخدم Despite + اسم (progress) بشكل سليم، وتوافق الفعل مع الفاعل الجمع (holds… are)، بينما تحتوي بقية الخيارات على أخطاء نحوية مثل استخدام Although مع اسم مباشرة بلا فاعل وفعل، أو hold بدلًا من holds، أو is بدلًا من are."},
+  {id:39, type:"translate", prompt:"على الرغم من أن التكنولوجيا جعلت حياتنا أسهل وأسرع، إلا أن الناس في العصر الحديث يشعرون أن وقتهم أصبح أقل من أي وقت مضى. فهل السبب هو كثرة المهام أم أننا لا نحسن تنظيم وقتنا؟",
+    dirType:"en", options:{
+      a:"Although technology has made our lives easier and faster, people in the modern age feel that they have less time than ever before. Is the reason too many tasks, or is it our poor time management?",
+      b:"Despite that technology made our life more easy and quick, people in modern times feel their time became less than before. Is the reason many works or our bad organizing of time?",
+      c:"Although the technology has made our lives easy and fast, but people nowadays feel that their time is shorter than any time before. Is it because of too many jobs or because we don't manage our time well?",
+      d:"Despite the fast technology, people in this age feel they don't have enough time. Is the reason having a lot of things to do or they can't organize their time?"},
+    correct:"a", explain:"الترجمة (أ) هي الأصح أسلوبًا وقواعديًا ومعنى: تستخدم Although بشكل سليم مع جملة كاملة (فاعل وفعل)، وتترجم المقارنة (less time than ever before) والسبب (too many tasks / poor time management) بدقة، بينما تحتوي باقي الخيارات على أخطاء قواعدية (مثل more easy بدلًا من easier، أو but الزائدة بعد Although) أو حذف لجزء من المعنى."},
+
+  {id:40, type:"essay", prompt:"Compare Edmond's hope with Fernand's jealousy. How do these two emotions lead to conflict? Give two points.",
+    model:"Edmond represents hope and optimism about his future with Mercedes. Fernand, however, feels jealous because he loves Mercedes but she loves Edmond. This jealousy pushes Fernand to betray Edmond and accuse him falsely. As a result, Edmond is imprisoned, and the conflict between the two characters begins.",
+    explain:"النقطة الأولى: الأمل يدفع إدموند نحو الطموح والبناء (الزواج والترقية). النقطة الثانية: الغيرة تدفع فرنان نحو التآمر والتدمير (المشاركة في القضاء على مستقبل إدموند). التعارض بين الدافعين هو ما يُنتج الصراع الدرامي في القصة."},
+  {id:41, type:"essay", prompt:"How do you think the promise of great wealth can motivate someone to survive hardships? Give two reasons.",
+    model:"The promise of great wealth can motivate someone to survive hardships because it gives them hope for a better future. It also provides a strong reason to remain patient and determined despite suffering and difficulties.",
+    explain:"السبب الأول: الثروة تمنح أملًا في مستقبل أفضل يدفع الإنسان للصمود والهروب من الشدائد. السبب الثاني: الثروة تمنح القدرة على تغيير الحياة ومساعدة الآخرين ومكافأة الأخيار ومعاقبة الظالمين."},
+  {id:42, type:"essay5", prompt:"Write a six-line body paragraph about the factors that motivate you to overcome challenges in your life.",
+    model:"Many factors motivate me to overcome challenges in my life. First, my ambition to achieve success encourages me to keep trying. Second, my family's support gives me confidence and strength. I also believe that difficulties help me become stronger and wiser. In addition, I learn from my mistakes and try to improve myself. For these reasons, I never give up when I face problems.",
+    modelAr:"هناك عوامل كثيرة تحفزني على تخطي التحديات في حياتي. أولًا، طموحي لتحقيق النجاح يشجعني على الاستمرار في المحاولة. ثانيًا، دعم أسرتي يمنحني الثقة والقوة. كما أنني أؤمن بأن الصعوبات تجعلني أقوى وأكثر حكمة. بالإضافة إلى ذلك، أتعلم من أخطائي وأحاول تطوير نفسي. لهذه الأسباب، لا أستسلم أبدًا عندما أواجه المشكلات.",
+    explain:"هذه فقرة نموذجية متكاملة العناصر: جملة موضوع (topic sentence)، تليها نقاط مدعومة بروابط تسلسلية (First, Second, Moreover, In addition, Finally)، وتنتهي بفكرة ختامية قوية. يمكن الاستعانة بنفس الأسلوب مع تغيير الأفكار الشخصية."},
+];
+
+const TEST_2_QUESTIONS = [
+  mcq(1,"The people are confident that the government will meet the .......... posed by the rising Nile water level.",
+    {a:"challengeable", b:"challenging", c:"challenged", d:"challenges"}, "d",
+    "التعبير الاصطلاحي الثابت هو meet the challenges (يواجه/يتغلب على التحديات)؛ نحتاج اسمًا جمعًا بعد أداة التعريف the وقبل الفعل posed، وباقي الخيارات صفات لا تصلح اسمًا هنا."),
+  mcq(2,"The astronauts managed to troubleshoot the shuttle's sudden pause. To troubleshoot means to ..........",
+    {a:"hinder", b:"diagnose", c:"maximize", d:"transfer"}, "b",
+    "troubleshoot تعني (يشخّص المشكلة ويحلها)، وهي الأقرب في المعنى إلى diagnose (يشخّص)."),
+  mcq(3,"In the recent decades, severe climate changes have had..........effects on coastal areas.",
+    {a:"trivial", b:"superficial", c:"tolerable", d:"profound"}, "d",
+    "profound تعني (عميقة/بالغة الأثر)، وهي المناسبة لوصف تأثير التغيرات المناخية الشديدة (severe) على المناطق الساحلية، بعكس بقية الكلمات التي تعني تأثيرًا بسيطًا أو محتملًا."),
+  mcq(4,"Our team put forward a perfect scheme that would guarantee fast and accurate .......... of the project.",
+    {a:"implementation", b:"explanation", c:"determination", d:"collaboration"}, "a",
+    "implementation تعني (التنفيذ)، وهي الكلمة المناسبة لخطة تضمن تنفيذًا سريعًا ودقيقًا للمشروع."),
+  mcq(5,"His speech had clear implications that the team would have a new coach next season. The word \"implications\" here means ..........",
+    {a:"sources", b:"effects", c:"hints", d:"customs"}, "c",
+    "implications تعني (تلميحات/إيحاءات ضمنية)، وهي الأقرب في المعنى لكلمة hints."),
+  mcq(6,"I've got myself .......... in problems I've nothing to do with.",
+    {a:"dedicated", b:"steamed", c:"entangled", d:"rescued"}, "c",
+    "entangled تعني (متورطًا/متشابكًا)، وهي مناسبة لوصف الانخراط في مشكلة لا علاقة للشخص بها أصلًا."),
+  mcq(7,"The teacher pretended not to have noticed his mistake to give him a chance for improvement. She had to .......... to it.",
+    {a:"wipe with relief", b:"come to a standstill", c:"bear the brunt", d:"turn a blind eye"}, "d",
+    "التعبير الاصطلاحي turn a blind eye to يعني (يتغاضى عمدًا عن شيء)، وهو المناسب لمعنى «التظاهر بعدم ملاحظة الخطأ»."),
+  mcq(8,"A smart entrepreneur should .......... in innovations rather than in capital.",
+    {a:"invest", b:"thrive", c:"detect", d:"perform"}, "a",
+    "invest in تعني (يستثمر في)، وهي التركيبة الصحيحة مع حرف الجر in، وتناسب سياق رجل الأعمال الذكي."),
+  mcq(9,"The students .......... well for this event so it is getting everyone's admiration.",
+    {a:"has prepared", b:"had been preparing", c:"have been preparing", d:"have prepared"}, "d",
+    "الجملة تصف سببًا (التحضير) ونتيجة حالية مكتملة (الحدث يلقى الآن إعجاب الجميع)، وهذا سياق المضارع التام البسيط (Present Perfect Simple) الذي يفيد فعلاً اكتمل وله أثر واضح في الحاضر. لا يوجد ظرف زمن مثل for/since يستدعي صيغة الاستمرار (have been preparing)، لذلك تكون الصيغة الصحيحة \"have prepared\"."),
+  mcq(10,"Amal's boss ordered that his instructions .......... be carried out literally the following day.",
+    {a:"might", b:"had to", c:"need", d:"has to"}, "b",
+    "عند نقل أمر إلزامي (must) في سياق الكلام غير المباشر بفعل ماضٍ مثل ordered، يتحول must إلى had to؛ لذلك تكون الصيغة الصحيحة \"had to be carried out\"."),
+  mcq(11,"Part of the secretary's daily tasks is to get all reports .......... before the manager's arrival.",
+    {a:"typing", b:"type", c:"typed", d:"to type"}, "c",
+    "تركيب get + مفعول + تصريف ثالث (get all reports typed) يفيد السببية (أن تجعل شخصًا آخر يطبع التقارير)، وهو المناسب هنا."),
+
+  mcq(12,"The suitable title of this passage is \" .......... \"",
+    {a:"Unavoidable Road Accidents", b:"A life lost, a lesson learned", c:"Tolerable Road Casualties", d:"No Pain, No Gain"}, "b",
+    "العنوان (b) يلخّص فكرة النص بدقة: مأساة إنسانية (فقدان حياة) تحمل درسًا مستفادًا (ضرورة اتباع قواعد السلامة)، وهو أنسب من بقية العناوين التي تتناقض مع مضمون النص أو تتجاهل الجانب الإرشادي فيه.", "p3"),
+  mcq(13,"Last year's accident happened when ..........",
+    {a:"somebody hit into the car with his bike", b:"the driver was talking to someone in the street", c:"a pedestrian stepped into the road suddenly", d:"the driver was looking back to someone in the car"}, "c",
+    "ورد في النص أن أحد المارة نزل فجأة عن الرصيف (a pedestrian stepped off the pavement) فصدمته السيارة، وهذا يطابق الخيار (c).", "p3"),
+  mcq(14,"The sentence that summarizes the last paragraph is \" .......... \".",
+    {a:"Drivers should always use the phone when driving to avoid accidents", b:"Pedestrians need to stay alert so drivers do not hit them", c:"Drivers should use signals and warnings to let others know what they plan to do; otherwise, they may cause casualties", d:"Drivers only need to signal when motorists are driving near them"}, "c",
+    "الفقرة الأخيرة تتحدث عن ضرورة تحذير السائقين للآخرين بوضوح من نواياهم (الانعطاف، تغيير المسار)، وإلا فقد يتسببون في حوادث، وهذا ما يلخصه الخيار (c) بدقة.", "p3"),
+  mcq(15,"The driver's distraction with the shops tragically resulted in ..........",
+    {a:"a damaged car but no one was seriously injured", b:"one casualty and a ruined vehicle", c:"two victims and a destroyed car", d:"an injured driver and a pedestrian lost his life"}, "b",
+    "ذكر التقرير الشرطي في النص \"One person killed, one car damaged\"، أي وفاة شخص واحد وتضرر سيارة واحدة، وهو ما يطابق الخيار (b).", "p3"),
+  mcq(16,"According to the passage, many accidents could have been prevented if..........",
+    {a:"drivers had followed the three basic safety rules", b:"pedestrians had stopped when the lights are red", c:"cars had been checked carefully before each trip", d:"drivers had lost control when their focus shifted away from driving"}, "a",
+    "ذكر النص صراحة أن هذه المآسي كان يمكن تجنّبها لو التزم الناس بثلاث قواعد بسيطة: التركيز، والتفكير المسبق، واستخدام إشارات واضحة، وهذا ما يطابق الخيار (a).", "p3"),
+  mcq(17,"We can infer from the text that the more distractions the driver finds ..........",
+    {a:"the less the road casualties", b:"the better the road safety", c:"the more attentive and patient he will be", d:"the less control he will have over the car"}, "d",
+    "كلما زاد شرود ذهن السائق (المزيد من المشتتات) قلّت سيطرته على السيارة، وهو استنتاج منطقي من فكرة النص الرئيسية عن فقدان التركيز.", "p3"),
+  mcq(18,"The driver and the pedestrians were similar in that they both ..........",
+    {a:"concentrated well on the road", b:"acted quickly at the right time", c:"were not paying enough attention to the road", d:"followed all the rules of road safety"}, "c",
+    "كلاهما (السائق والمشاة) لم يكونا منتبهين بما يكفي للطريق، وهذا هو السبب المشترك وراء وقوع الحادث.", "p3"),
+  mcq(19,"The scene of 'a faint trace of blood marked the dust' can be described as ..........",
+    {a:"hopeless", b:"painful", c:"vague", d:"comforting"}, "b",
+    "هذه الصورة الوصفية مؤلمة وموجعة (painful)؛ فهي تجسّد أثر مأساة إنسانية حقيقية بصريًا للقارئ.", "p3"),
+
+  mcq(20,"The main idea of this passage is that ..........",
+    {a:"embarrassing situations can sometimes spoil people's enjoyment.", b:"Hani and his family were out watching a famous play which they intended to act.", c:"experiencing a different theatre show makes one feel as being part of the incidents.", d:"Hani is inspired with the play and decides he wants to become an actor."}, "c",
+    "الفكرة الرئيسية هي أن حضور عرض مسرحي مختلف وواقعي (حين يظن هاني أن أحد الممثلين شخص حقيقي) يجعل المُشاهد يشعر وكأنه جزء من أحداث المسرحية، وهذا ما يلخصه الخيار (c).", "p4"),
+  mcq(21,"The idea of Hani becoming an actor ..........",
+    {a:"appealed to everyone in the family", b:"reminded Hani of his inspiring dream", c:"aroused everyone's joy and laughter", d:"encouraged Hani to join acting at school"}, "c",
+    "ورد في النص أن الجميع ضحك (We all laughed) عندما اقترحت دينا أن يصبح هاني ممثلاً، أي أن الفكرة أثارت مرحًا وضحكًا، وليست جدية أو ملهمة.", "p4"),
+  mcq(22,"The sentence that summarizes the second paragraph is ..........",
+    {a:"Hani knew the plot of the play and didn't try to spoil it, though he faced an embarrassing situation.", b:"Macbeth is a play which attracts everyone to share the actors the play", c:"Hani finds himself in trouble while trying to guide an audience to his seat", d:"Macbeth is in thunderstorm trying to kill Duncan to become king"}, "a",
+    "الفقرة الثانية تصف كيف حاول هاني مساعدة من ظنه متأخرًا في الوصول لمقعده فتبيّن أنه ممثل، مما سبّب له إحراجًا، وهذا ما يلخصه الخيار (a).", "p4"),
+  mcq(23,"The man in the aisle was actually ..........",
+    {a:"a real soldier in Macbeth's army", b:"acting a role in the play", c:"an audience searching for his seat", d:"playing the role of Macbeth"}, "b",
+    "تبيّن من النص أن الرجل كان ممثلاً يؤدي دورًا في المسرحية (He was in the play!)، وليس مشاهدًا يبحث عن مقعده.", "p4"),
+  mcq(24,"If Hani had revealed the secret of Macbeth ..........",
+    {a:"he would have saved Duncan", b:"the play would have been ruined", c:"he would have helped Macbeth", d:"the audience would have been happy"}, "b",
+    "ذكر النص أن هاني لم يخبر الملك دنكان بمصيره لأن ذلك كان سيغيّر أحداث المسرحية (they would have to change the play)، أي كان سيفسدها.", "p4"),
+  mcq(25,"Next time Hani goes to the theatre he will probably ..........",
+    {a:"avoid sitting next to an aisle seat", b:"take an action to help the audience", c:"uncover unknown incidents in the play", d:"stop interference while watching"}, "d",
+    "بعد أن تعلّم هاني درسًا من موقفه المحرج، فمن المتوقع أنه سيتوقف عن التدخل أثناء المشاهدة في المرة القادمة.", "p4"),
+  mcq(26,"Despite being interrupted by Hani, the man in the aisle ..........",
+    {a:"went on performing for the audience", b:"decided to abandon his seat for Hani", c:"stopped acting and left the stage", d:"sat down quietly in his aisle seat"}, "a",
+    "رغم مقاطعة هاني له، واصل الممثل أداء دوره وركض نحو المسرح صارخًا جملته المسرحية، أي استمر في التمثيل أمام الجمهور.", "p4"),
+  mcq(27,"We can learn from the story that ..........",
+    {a:"acting is a rewarding career we all must do", b:"embarrassing situations teach us something", c:"we need to learn acting to avoid embarrassment", d:"family gatherings can cause us trouble"}, "b",
+    "العبرة المستفادة من القصة أن المواقف المحرجة قد تعلّمنا دروسًا مفيدة (مثل عدم التدخل دون تأكد)، وهذا ما يلخصه الخيار (b).", "p4"),
+
+  mcq(28,"Mum wanted to know .......... to make the school request her presence.",
+    {a:"what I had done", b:"if I had done", c:"what have I done", d:"whether I have done"}, "a",
+    "السؤال هنا بأداة استفهام (what = ماذا فعلت) وليس سؤال نعم/لا، فلا تصلح if/whether؛ ونستخدم الترتيب الخبري الطبيعي مع الماضي التام (had done) لأنه سابق لطلب المدرسة، فتكون الصيغة الصحيحة \"what I had done\"."),
+  mcq(29,"Do you know how to sign up for an e-mail account or shall I .......... ?",
+    {a:"have you to make one", b:"get someone to make it", c:"have it to be made", d:"get it made for you"}, "d",
+    "تركيب get + مفعول + تصريف ثالث (get it made) يفيد السببية (تجعل شخصًا آخر ينشئه لك)، والصيغة الصحيحة مع for you هي get it made for you."),
+  mcq(30,"Which of the following is structurally correct?",
+    {a:"Ali my best friend is thirty year old.", b:"Ali, my best friend, is a thirty years old.", c:"Ali, my best friend, is thirty years old.", d:"Ali my best friend is a thirty year old."}, "c",
+    "الاسم الموصوف (my best friend) يُفصل بفاصلتين كجملة اعتراضية (appositive)، ويُكتب العمر بصيغة الجمع دون أداة نكرة (thirty years old)."),
+  mcq(31,"The amazingly shaped statue of the king .......... everyone of the visitors",
+    {a:"admired", b:"was admired by", c:"had admired", d:"admires"}, "b",
+    "التمثال هو الذي أُعجب به الزوار (الزوار هم من قاموا بالإعجاب)، لذلك يجب استخدام صيغة المبني للمجهول (was admired by) ليكون التمثال هو الفاعل النحوي الصحيح للجملة."),
+  mcq(32,"When writing a formal email, you shouldn't ..........",
+    {a:"state the topic of the email directly in your subject", b:"give casual greetings", c:"introduce yourself or explain your relationship or significance to the recipient", d:"proofread before sending your email"}, "b",
+    "في المراسلات الرسمية يجب تجنّب التحيات غير الرسمية (casual greetings)، بينما ذكر موضوع الرسالة، والتعريف بالنفس، ومراجعة الرسالة كلها من آداب البريد الرسمي الصحيحة."),
+  mcq(33,".......... use this slow and old model laptop? There are other upgraded ones available.",
+    {a:"Do you have to", b:"Must you", c:"Should you", d:"Could you"}, "b",
+    "صيغة \"Must you...?\" تُستخدم للتعبير عن الانزعاج أو الاستنكار من إصرار شخص على فعل شيء غير ضروري، وهذا هو المعنى المقصود هنا مع وجود أجهزة أحدث متاحة."),
+  mcq(34,"A strict policeman doesn't allow ..........",
+    {a:"the law be violated", b:"anyone violate the law", c:"the law being violate", d:"anyone to violate the law"}, "d",
+    "الفعل allow يأتي بعده مفعول به ثم مصدر مسبوق بـ to (allow someone to do something)، فتكون الصيغة الصحيحة \"anyone to violate the law\"."),
+  mcq(35,"No survivors have been recorded in the avalanche catastrophe. All the climbers .......... buried under thick layers of ice.",
+    {a:"must have", b:"can't have been", c:"must have been", d:"can't have"}, "c",
+    "نستخدم must have been + تصريف ثالث للتعبير عن استنتاج منطقي شبه مؤكد عن حدث ماضٍ مبني للمجهول (لا بد أنهم دُفنوا)، وهو استنتاج منطقي من عدم وجود ناجين."),
+
+  {id:36, type:"translate", prompt:"Man has always explored the world in a try to understand and discover the secrets of the cosmos. He could never resist the desire to find out what's beyond our planet in space.",
+    dirType:"ar", options:{
+      a:"لقد كان الإنسان دائمًا يستكشف العالم في محاولة لفهم واكتشاف أسرار الطبيعة، ولم يستطع أبدًا أن يقاوم رغبته في معرفة ما وراء كوكبنا في الفضاء.",
+      b:"لقد كان الإنسان دائمًا يستكشف العالم في محاولة لفهم واكتشاف أسرار الكون، ولم يستطع أبدًا أن يقاوم رغبته في معرفة ما وراء كوكبنا في الفضاء.",
+      c:"لطالما استكشف الإنسان العالم بحثًا عن أسرار الكون، ولم يفكر يومًا فيما وراء كوكبنا في الفضاء.",
+      d:"كان الإنسان يحاول أحيانًا استكشاف العالم لفهم أسرار الوجود، وتخلى عن رغبته في معرفة ما وراء كوكبنا."},
+    correct:"b", explain:"الترجمة (ب) هي الأدق لأنها تنقل كلمة cosmos بمعنى (الكون) وليس (الطبيعة)، وتترجم عبارة could never resist the desire بمعناها الصحيح (لم يستطع أبدًا أن يقاوم رغبته)، بينما تحرّف بقية الترجمات المعنى الأصلي أو تعكسه تمامًا."},
+  {id:37, type:"translate", prompt:"Land transport can be said to have begun with the invention of the wheel in Mesopotamia over 5,000 years ago. Before that, if one wanted to travel, one walked or rode on the back of an animal.",
+    dirType:"ar", options:{
+      a:"يمكن القول إن النقل البري بدأ باختراع العجلة في بلاد الرافدين منذ أكثر من خمسة آلاف عام. وقبل ذلك، إذا أراد شخص أن يسافر، فكان يسير على قدميه أو يمتطي ظهر حيوان.",
+      b:"يُعتقد أن السباق الأرضي بدأ مع اختراع الدراجة في بلاد الرافدين منذ خمسة آلاف سنة، وقبل هذا إذا أراد الشخص السفر فإنه كان يسير على قدميه أو يمتطي ظهر حيوان.",
+      c:"يقال إن النقل البري بدأ مع اكتشاف العجلة في بلاد الرافدين منذ خمسة آلاف سنة، وبعد هذا إذا أراد الشخص السفر فإنه كان يمشي أو يمتطي ظهر حيوان.",
+      d:"يعتقد أن النقل الأرضي بدأ مع اختراع العجلة في بلاد الرافدين منذ خمسة آلاف سنة، وفوق هذا إذا أراد شخص السفر فإنه كان يمشي أو يمتطي ظهر حيوان."},
+    correct:"a", explain:"الترجمة (أ) وحدها تنقل المعنى بدقة: اختراع العجلة (wheel) وليس الدراجة، وتترجم Before that بمعناها الصحيح (وقبل ذلك)، بينما تستبدل بقية الترجمات كلمة wheel بكلمة خاطئة أو تعكس الظرف الزمني (بعد/فوق بدلاً من قبل)."},
+  {id:38, type:"translate", prompt:"المستشفى مؤسسة شديدة التعقيد ومصممة للتعامل مع العديد من المشاكل. ويمكن أن نرى هذا بالنظر عن قرب فيما يحدث مع مختلف أنواع المرضى الذين يتلقون فيها العلاج.",
+    dirType:"en", options:{
+      a:"The hospital is a very complex formation and is designed to deal with a variety of problems. We can see this by locking closely at what happens to the different types of patients who are treated in it.",
+      b:"The hospital is a very complex organization and is designed to deal from a variety of problems. We can see this by looking closely at what happens to the different types of patience who are treated in it.",
+      c:"The hospital is a very complex organization and is signed to deal with a variety of problems. We can see this by looking nearly at what happens to the different types of patients who are treated in it.",
+      d:"The hospital is a very complex organization and is designed to deal with a variety of problems. We can see this by looking closely at what happens to the different types of patients who are treated in it."},
+    correct:"d", explain:"الترجمة (د) هي الصحيحة نحويًا ومعجميًا بالكامل (organization، designed to deal with، looking closely، patients)، بينما تحتوي بقية الخيارات على أخطاء واضحة: formation بدلاً من organization، deal from بدلاً من deal with، signed بدلاً من designed، patience بدلاً من patients، ونظرة nearly بدلاً من closely."},
+  {id:39, type:"translate", prompt:"الناس لديها أسباب مختلفة للالتحاق بالجامعة. فالبعض يريد ببساطة أن يتعلم أن يكون مستقلاً والبعض ينظر إليها على أنها تجربة مختلفة، ولكن الغالبية يذهبون للجامعة للشغف الحقيقي والاهتمام بالعلم الذي يدرسونه.",
+    dirType:"en", options:{
+      a:"People have different reasons for joining university. Some simply want to learn to be independent; others regard it as a different experience. The majority, however, go to university for the real passion and interest in the science they are studying.",
+      b:"People have different factors for going to university. Some simply want to learn to be independent, others regard it as a different opportunity. Most people, however, go to university for a real passion and interest in the science they are studying.",
+      c:"People have different reasons for going to university. Some simply want to learn to be dependent, others see it as a different experience. Many people, despite, go to university for a real passion and interest in the science they are studying.",
+      d:"People have different reasons for going to university. Some simply want to learn to be independent, others regard it as a different experiment. Most people, however, go to university for a rail passion and interest in the science they are studying."},
+    correct:"a", explain:"الترجمة (أ) هي الأدق: تحافظ على كلمة reasons (أسباب) لا factors، وindependent (مستقلاً) لا dependent (المعنى المعاكس)، وexperience (تجربة) لا experiment/opportunity، بينما تحتوي بقية الترجمات على أخطاء معجمية تُحرّف المعنى المقصود."},
+
+  {id:40, type:"essay", prompt:"How far do you think Edmund's revenge of his enemies compensated for his loss?",
+    model:"Edmund's revenge brought him power and wealth, but it did not truly compensate for his loss. Although he succeeded in punishing those who betrayed him, he lost many years of his life in prison. Revenge also made him more isolated and distrustful of others.",
+    explain:"النقطة الأولى: الثروة والسلطة التي حصل عليها إدموند لا تعوّضانه عن سنوات عمره الضائعة ظلمًا في السجن. النقطة الثانية: الانتقام جعله شخصًا معزولًا لا يثق بالآخرين، وهو ثمن نفسي باهظ رغم تحقيق العدالة الظاهرية."},
+  {id:41, type:"essay", prompt:"Who do you think deserved Edmund's greatest punishment? Why?",
+    model:"Fernand deserved Edmund's greatest punishment because he betrayed him out of jealousy. He falsely accused Edmund of treason in order to marry Mercedes. His betrayal destroyed Edmund's life and caused him to spend many years in prison.",
+    explain:"السبب الأول: خيانة فرنان كانت مدفوعة بالغيرة الشخصية والرغبة في الزواج من ميرسيدس. السبب الثاني: خيانته كانت السبب المباشر في سجن إدموند سنوات طويلة، مما يجعله الأكثر استحقاقًا للعقاب مقارنة بباقي الشخصيات."},
+  {id:42, type:"essay5", prompt:"\"Schools can be attractive in four ways\"",
+    model:"Schools can be attractive in several important ways. First, they should provide a clean and safe environment for students. Second, modern technology such as computers and smart boards can make learning more interesting. Third, schools should organize sports and cultural activities that develop students' talents. Finally, supportive teachers who encourage creativity and participation make school life enjoyable. When these factors are available, students feel motivated and excited to learn.",
+    modelAr:"يمكن أن تكون المدارس جذابة بعدة طرق مهمة. أولًا، يجب أن توفر بيئة نظيفة وآمنة للطلاب. ثانيًا، يمكن للتكنولوجيا الحديثة مثل الحواسيب والسبورات الذكية أن تجعل التعلم أكثر تشويقًا. ثالثًا، يجب على المدارس تنظيم أنشطة رياضية وثقافية تنمّي مواهب الطلاب. وأخيرًا، فإن المعلمين الداعمين الذين يشجعون الإبداع والمشاركة يجعلون الحياة المدرسية ممتعة. وعندما تتوافر هذه العوامل، يشعر الطلاب بالحافز والحماس للتعلم.",
+    explain:"هذه فقرة نموذجية تضم أربع نقاط مرتبطة بروابط تسلسلية واضحة (First, Second, Third, Finally)، تغطي: البيئة الآمنة، التكنولوجيا، الأنشطة، والمعلمين الداعمين، وتنتهي بخلاصة تربط هذه العوامل بدافعية الطالب — وهو الهيكل المطلوب بالضبط في سؤال الفقرة المكوّنة من أربع طرق."},
+];
+
+const TESTS_DATA = {
+  1: { passages:{p1:PASSAGE_1, p2:PASSAGE_2}, passagesAr:{p1:PASSAGE_1_AR, p2:PASSAGE_2_AR}, questions: TEST_1_QUESTIONS },
+  2: { passages:{p3:PASSAGE_3, p4:PASSAGE_4}, passagesAr:{p3:PASSAGE_3_AR, p4:PASSAGE_4_AR}, questions: TEST_2_QUESTIONS }
+};
+
+/* ترجمة عربية لكل سؤال واختياراته (تُعرض وتُخفى بضغطة زر، ولا تُظهر الإجابة الصحيحة) */
+const TEST1_TRANSLATIONS = {
+  1:{promptAr:"غالبًا ما تدعم المشروعات التعليمية الفئات ............. التي تفتقر إلى تكافؤ الفرص.", optionsAr:{a:"شعبية", b:"مركزية", c:"قوية", d:"مهمّشة"}},
+  2:{promptAr:"لا ............. صعوبة هذا الامتحان؛ فهو صعب جدًا.", optionsAr:{a:"تفهم", b:"تسطّر تحت", c:"تستهين بـ / تقلل من شأن", d:"تتعهد بـ / تباشر"}},
+  3:{promptAr:"كانت السماء .............، لذا لم نستطع رؤية الشمس.", optionsAr:{a:"ملبّدة بالغيوم", b:"مشرقة", c:"مشمسة", d:"غامضة"}},
+  4:{promptAr:"بدأ الرضيع ............. بصوت عالٍ عندما كان جائعًا.", optionsAr:{a:"يهمس", b:"يئنّ / يتأوّه", c:"يضحك", d:"يصفّق"}},
+  5:{promptAr:"الكتاكيت ............. من بيضها الآن.", optionsAr:{a:"تفقس", b:"تُمسك", c:"تُشاهد", d:"تُطابق"}},
+  6:{promptAr:"السيارات ……………… انبعاثات غازية ضارة تلوّث الهواء.", optionsAr:{a:"تُنتج", b:"تُقدّم / تُدخل", c:"تستنتج", d:"تسيء استخدام"}},
+  7:{promptAr:"عندما خرجنا، كانت الدنيا …………… بغزارة شديدة (تعبير اصطلاحي).", optionsAr:{a:"تُشاهد", b:"تسقط", c:"تلعب", d:"تُمطر"}},
+  8:{promptAr:"كنا ………………… العشاء في الساعة الثامنة مساءً أمس.", optionsAr:{a:"نتناول (مضارع)", b:"كنا قد تناولنا (تام)", c:"كنا نتناول (مستمر)", d:"يتناول (مفرد غائب)"}},
+  9:{promptAr:"يريد أن يدرس في ……………..جامعة أكسفورد.", optionsAr:{a:"أداة نكرة (a)", b:"أداة نكرة قبل حرف علة (an)", c:"أداة تعريف (the)", d:"بدون أداة"}},
+  10:{promptAr:"ما الصيغة الصحيحة للكلام غير المباشر للجملة: قالت: 'أنا متعبة'.", optionsAr:{a:"قالت إنها كانت متعبة.", b:"قالت إنها متعبة (خطأ زمني).", c:"قالت إنها ستكون متعبة.", d:"قالت إنها كانت قد تعبت."}},
+  11:{promptAr:"تعرّضنا للسرقة لأنني تذكرت أنني لم ………… الباب.", optionsAr:{a:"أقفل (ing)", b:"أقفل (مصدر to)", c:"أقفلتُ (ماضي)", d:"أقفل (مصدر مجرد)"}},
+
+  12:{promptAr:"ما هي الفكرة المحورية للقصة؟", optionsAr:{a:"كانت عطلة الراوي في سانت كاترين مملة.", b:"أخذت عطلة الراوي منحى غير متوقع.", c:"أعدّ صاحب المطعم وجبة لذيذة.", d:"عطلة مروّعة سيتذكرها الراوي دائمًا."}},
+  13:{promptAr:"أين قابل الراوي الرجل العجوز أول مرة؟", optionsAr:{a:"داخل غرفته في الفندق", b:"في مطبخ المطعم", c:"خارج المطعم", d:"في سوق القرية"}},
+  14:{promptAr:"بماذا وصف صاحب المطعم الرجل العجوز؟", optionsAr:{a:"عرّاف", b:"رجل القرية الغامض", c:"رجل مقدّس", d:"مرشد سياحي"}},
+  15:{promptAr:"أي مما يلي يلخّص الجزء الأوسط من القصة (لقاء الرجل العجوز)؟", optionsAr:{a:"قابل الراوي رجلاً عجوزًا أخبره بدقة عن ماضيه وادّعى معرفة المستقبل.", b:"أقام الراوي في فندق أعدّ له صاحبه اللطيف غرفته وعشاءه.", c:"قضى الراوي المساء يشاهد الغروب ويشمّ رائحة دخان الحطب.", d:"صدّق الراوي العرافة وطلب من الرجل أن يتنبأ بمستقبله."}},
+  16:{promptAr:"الحدث الذي غيّر رأي الراوي في الرجل العجوز هو عندما…", optionsAr:{a:"عرض عليه أن يخبره بالمستقبل", b:"عاد صاحب المطعم", c:"كشف عن ماضي الراوي", d:"اختفى الرجل العجوز"}},
+  17:{promptAr:"عندما وصف الرجل العجوز طفولة الراوي، كان الراوي………", optionsAr:{a:"غاضبًا وخائب الأمل", b:"متحمسًا لكن مصدومًا", c:"مستمتعًا لكن مرعوبًا", d:"مرتابًا وقلقًا"}},
+  18:{promptAr:"على مدار القصة تغيّرت مشاعر الراوي تجاه الرجل العجوز من……", optionsAr:{a:"الخوف إلى الغضب", b:"عدم التصديق إلى الدهشة", c:"الاحترام إلى الكراهية", d:"الحزن إلى السعادة"}},
+  19:{promptAr:"ما السبب الأرجح لاختفاء الرجل العجوز قبل عودة السيد حسن؟", optionsAr:{a:"لم يرغب في أن يراه السيد حسن.", b:"كان مسافرًا غادر بحثًا عن الطعام.", c:"لم يكن سوى نسج من خيال الراوي.", d:"ذهب ليجهّز غرفة الراوي."}},
+
+  20:{promptAr:"الفكرة الرئيسية للنص أن الطاقة المتجددة …………….. .", optionsAr:{a:"مكلفة جدًا لدرجة عدم عمليتها", b:"يمكن أن تحل محل الوقود الأحفوري بطريقة مستدامة", c:"تضر بالبيئة", d:"تُستخدم في أوروبا فقط"}},
+  21:{promptAr:"بناءً على الفقرة الأولى، بماذا يشجّع الكاتب القارئ ضمنيًا فيما يخص استنزاف الموارد؟", optionsAr:{a:"تجاهله لأنه عملية طبيعية.", b:"إدراك مدى خطورته والتحرك لوقفه.", c:"افتراض أنه سيُحل من تلقاء نفسه.", d:"الاعتقاد بأنه يؤثر على العلماء فقط."}},
+  22:{promptAr:"أي أشكال الطاقة يُنتَج من ضوء الشمس؟", optionsAr:{a:"الطاقة المائية", b:"طاقة الرياح", c:"الطاقة الشمسية", d:"الطاقة الحرارية الأرضية"}},
+  23:{promptAr:"وفقًا للنص، ما إحدى مشكلات الطاقة المتجددة؟", optionsAr:{a:"تعتمد على أحوال الطقس", b:"تسبب تلوث الهواء", c:"لا يمكنها إنتاج كهرباء", d:"أضر من الوقود الأحفوري"}},
+  24:{promptAr:"أسلوب النص في الغالب ……………….. .", optionsAr:{a:"نقدي", b:"فكاهي", c:"عاطفي", d:"إخباري / معلوماتي"}},
+  25:{promptAr:"بناءً على النص، ماذا يمكن أن نستنتج عن مستقبل الطاقة المتجددة؟", optionsAr:{a:"سيحل محلها الوقود الأحفوري", b:"ستستمر على الأرجح في النمو", c:"ستختفي قريبًا", d:"لا تدعمها الحكومات"}},
+  26:{promptAr:"وفقًا للنص، أي دولة ذُكرت كمستخدمة للطاقة الحرارية الأرضية؟", optionsAr:{a:"فرنسا", b:"آيسلندا", c:"مصر", d:"اليابان"}},
+  27:{promptAr:"أي عبارة تلخّص الفقرة الثانية من النص؟", optionsAr:{a:"توضح كيف تحوّل الطاقة الشمسية وطاقة الرياح الموارد الطبيعية إلى كهرباء وتزايد انتشارهما.", b:"تجادل بأن الطاقة الشمسية ما زالت مكلفة جدًا لتركيبها أو صيانتها.", c:"تصف الطاقة المائية بأنها أقدم مصادر الطاقة وأكثرها موثوقية.", d:"تركّز على المشكلات البيئية الناتجة عن حرق الوقود الأحفوري."}},
+
+  28:{promptAr:"'بينما كنا نشاهد التلفاز، رنّ الهاتف.' أي مما يلي يصحح الخطأ في هذه الجملة؟", optionsAr:{a:"استبدال While بـ after", b:"استبدال rang بـ was ringing", c:"استبدال While بـ before", d:"استبدال watched بـ were watching"}},
+  29:{promptAr:"أي جملة تحمل علامات ترقيم صحيحة؟", optionsAr:{a:"كثير من الطلاب الذين ذاكروا بجد نجحوا في الامتحان (بلا فواصل).", b:"نفس الجملة بفاصلة زائدة غير صحيحة.", c:"بفواصل حول الجملة الموصولة (استخدام خاطئ هنا).", d:"بفواصل منقوطة غير صحيحة."}},
+  30:{promptAr:"أي من الجمل التالية تحتوي على جملة صفة موصولة (relative clause)؟", optionsAr:{a:"لا أعرف أين تعيش.", b:"يجري أسرع مني.", c:"الكتاب الذي أعطيتني إياه ممتع.", d:"ذهبت إلى المنزل عندما كانت متعبة."}},
+  31:{promptAr:"اختر الصيغة الصحيحة للكلام غير المباشر: قالت: 'لو كنت أعلم أنه قادم لكنت أعددت شيئًا مميزًا'.", optionsAr:{a:"قالت لو كانت تعلم أنه قادم لأعدّت شيئًا مميزًا (نتيجة خاطئة زمنيًا).", b:"قالت إنها لو كانت تعلم أنه قادم لكانت أعدّت شيئًا مميزًا.", c:"صياغة غير صحيحة نحويًا.", d:"صياغة غير صحيحة نحويًا."}},
+  32:{promptAr:"أي جملة تصف حدثًا قاطعه حدث آخر؟", optionsAr:{a:"أنهيت عملي مبكرًا لكنني لم أخرج.", b:"غسل السيارة وانطلق.", c:"كنت أطبخ عندما انقطعت الكهرباء.", d:"كنت أراجع التقارير بينما كان علي يحاول إصلاح الآلة (فعلان متزامنان)."}},
+  33:{promptAr:"أي جملة تركيبها صحيح؟", optionsAr:{a:"أثناء الجري في الحديقة، بدأ المطر يهطل (فاعل معلّق خاطئ).", b:"بينما كنت أجري في الحديقة، رأيت المطر يبدأ في الهطول.", c:"بدأ المطر يهطل أثناء الجري في الحديقة (تركيب مربك).", d:"تركيب خاطئ تمامًا."}},
+  34:{promptAr:"ما وظيفة كلمة 'does' المسطر تحتها في الجملة؟", optionsAr:{a:"فعل مساعد لتكوين الأسئلة", b:"فعل ناقص للقدرة", c:"أداة ربط للتضاد", d:"للتوكيد"}},
+  35:{promptAr:"جملة سببية: طلب المدير فحص التقرير قبل إرساله للمدير العام. ماذا تعني هذه الجملة؟", optionsAr:{a:"فحص المدير التقرير بنفسه.", b:"شخص آخر فحص التقرير نيابةً عن المدير.", c:"نسي المدير فحص التقرير.", d:"لم يُفحص التقرير إطلاقًا."}},
+
+  40:{promptAr:"قارن بين أمل إدموند وغيرة فرنان. كيف يؤدي هذان الشعوران إلى الصراع؟ اذكر نقطتين."},
+  41:{promptAr:"كيف تعتقد أن الوعد بثروة عظيمة يمكن أن يحفّز شخصًا على الصمود أمام الشدائد؟ اذكر سببين."},
+  42:{promptAr:"اكتب فقرة أساسية من ست جمل عن العوامل التي تحفزك على تجاوز التحديات في حياتك."}
+};
+const TEST2_TRANSLATIONS = {
+  1:{promptAr:"الناس واثقون من أن الحكومة ستواجه ……………… الناتجة عن ارتفاع منسوب مياه النيل.", optionsAr:{a:"يمكن تحديه (صفة غير سليمة هنا)", b:"مليء بالتحدي (صفة)", c:"تم تحديه (صفة)", d:"التحديات (اسم جمع - الصحيحة)"}},
+  2:{promptAr:"تمكّن رواد الفضاء من إصلاح التوقف المفاجئ للمكوك. troubleshoot تعني ……………", optionsAr:{a:"يعيق", b:"يشخّص", c:"يعظّم", d:"ينقل"}},
+  3:{promptAr:"في العقود الأخيرة، كان للتغيرات المناخية الشديدة آثار …………… على المناطق الساحلية.", optionsAr:{a:"تافهة", b:"سطحية", c:"محتملة", d:"عميقة / بالغة"}},
+  4:{promptAr:"قدّم فريقنا خطة مثالية تضمن …………… سريعًا ودقيقًا للمشروع.", optionsAr:{a:"تنفيذًا", b:"شرحًا", c:"تصميمًا/عزمًا", d:"تعاونًا"}},
+  5:{promptAr:"حملت كلمته إيحاءات واضحة بأن الفريق سيحصل على مدرب جديد الموسم القادم. كلمة implications هنا تعني ……………", optionsAr:{a:"مصادر", b:"آثار", c:"تلميحات", d:"عادات"}},
+  6:{promptAr:"وجدت نفسي …………… في مشاكل لا علاقة لي بها.", optionsAr:{a:"مكرَّسًا", b:"غاضبًا جدًا (steamed)", c:"متورطًا/متشابكًا", d:"منقذًا"}},
+  7:{promptAr:"تظاهرت المعلمة بعدم ملاحظة خطئه لتعطيه فرصة للتحسن. كان عليها أن …………… عنه.", optionsAr:{a:"تمسح بارتياح", b:"تتوقف تمامًا", c:"تتحمل وطأة الأمر", d:"تتغاضى"}},
+  8:{promptAr:"يجب على رائد الأعمال الذكي أن …………… في الابتكارات لا في رأس المال.", optionsAr:{a:"يستثمر", b:"يزدهر", c:"يكتشف", d:"يؤدي"}},
+  9:{promptAr:"الطلاب …………… بشكل جيد لهذا الحدث لذا فهو يحظى بإعجاب الجميع.", optionsAr:{a:"أعدّوا (تام بسيط - لكن الفاعل جمع فلا تصلح has)", b:"كانوا قد أعدّوا (تام مستمر ماضٍ - خاطئ زمنيًا)", c:"يعدّون منذ فترة حتى الآن (تام مستمر - لا يوجد ظرف زمن يستدعيه)", d:"أعدّوا (تام بسيط يفيد فعلاً مكتملاً وأثره ظاهر الآن - الصحيحة)"}},
+  10:{promptAr:"أمر رئيس أمل بأن …………… تعليماته حرفيًا في اليوم التالي.", optionsAr:{a:"ربما (might)", b:"وجب (had to - الصحيحة)", c:"يحتاج (need)", d:"يجب (has to)"}},
+  11:{promptAr:"جزء من مهام السكرتيرة اليومية أن تجعل كل التقارير …………… قبل وصول المدير.", optionsAr:{a:"تطبع (ing)", b:"تطبع (مصدر)", c:"مطبوعة (تصريف ثالث - الصحيحة)", d:"لتطبع (مصدر to)"}},
+
+  12:{promptAr:"العنوان المناسب لهذه القطعة هو \" …………… \"", optionsAr:{a:"حوادث طرق لا يمكن تجنبها", b:"حياة ضاعت، ودرس تعلّمناه", c:"إصابات طرق يمكن تحملها", d:"بلا ألم لا مكسب"}},
+  13:{promptAr:"وقع حادث العام الماضي عندما ……………", optionsAr:{a:"اصطدم شخص بالسيارة بدراجته", b:"كان السائق يتحدث مع شخص في الشارع", c:"نزل أحد المارة فجأة إلى الطريق", d:"كان السائق ينظر خلفه لشخص في السيارة"}},
+  14:{promptAr:"الجملة التي تلخّص الفقرة الأخيرة هي \" …………… \".", optionsAr:{a:"يجب أن يستخدم السائقون الهاتف دائمًا لتجنب الحوادث", b:"يجب أن يبقى المشاة منتبهين حتى لا يصدمهم السائقون", c:"يجب أن يستخدم السائقون الإشارات والتحذيرات ليعرف الآخرون نواياهم، وإلا فقد يتسببون في إصابات", d:"لا يحتاج السائقون للإشارة إلا عند اقتراب سيارات أخرى منهم"}},
+  15:{promptAr:"أدى انشغال السائق بالمحلات بشكل مأساوي إلى ……………", optionsAr:{a:"تضرر السيارة دون إصابة خطيرة لأحد", b:"وفاة شخص واحد وتلف السيارة", c:"ضحيتين وتدمير السيارة", d:"إصابة السائق ووفاة أحد المارة"}},
+  16:{promptAr:"وفقًا للنص، كان يمكن تجنب كثير من الحوادث لو ……………", optionsAr:{a:"اتبع السائقون قواعد السلامة الثلاث الأساسية", b:"توقف المشاة عند الإشارة الحمراء", c:"فُحصت السيارات جيدًا قبل كل رحلة", d:"فقد السائقون السيطرة عندما شرد انتباههم عن القيادة"}},
+  17:{promptAr:"نستنتج من النص أنه كلما وجد السائق مشتتات أكثر ……………", optionsAr:{a:"قلّت إصابات الطرق", b:"تحسنت سلامة الطريق", c:"أصبح أكثر انتباهًا وصبرًا", d:"قلّت سيطرته على السيارة"}},
+  18:{promptAr:"تشابه السائق مع المشاة في أن كليهما ……………", optionsAr:{a:"ركّز جيدًا على الطريق", b:"تصرّف بسرعة في الوقت المناسب", c:"لم يكن منتبهًا بما يكفي للطريق", d:"اتبع كل قواعد سلامة الطريق"}},
+  19:{promptAr:"يمكن وصف مشهد \"أثر دم خفيف على الغبار\" بأنه ……………", optionsAr:{a:"يائس", b:"مؤلم", c:"غامض", d:"مريح"}},
+
+  20:{promptAr:"الفكرة الرئيسية لهذه القطعة هي أن ……………", optionsAr:{a:"المواقف المحرجة قد تفسد أحيانًا استمتاع الناس", b:"كان هاني وعائلته يشاهدون مسرحية شهيرة كانوا ينوون تمثيلها", c:"خوض تجربة مسرحية مختلفة يجعل المرء يشعر وكأنه جزء من الأحداث", d:"استلهم هاني من المسرحية وقرر أن يصبح ممثلاً"}},
+  21:{promptAr:"فكرة أن يصبح هاني ممثلاً ……………", optionsAr:{a:"راقت لكل أفراد الأسرة", b:"ذكّرت هاني بحلمه الملهم", c:"أثارت فرح الجميع وضحكهم", d:"شجعت هاني على الالتحاق بالتمثيل في المدرسة"}},
+  22:{promptAr:"الجملة التي تلخّص الفقرة الثانية هي ……………", optionsAr:{a:"عرف هاني حبكة المسرحية ولم يحاول إفسادها رغم موقفه المحرج", b:"مسرحية ماكبث تجذب الجميع لمشاركة الممثلين المسرحية", c:"وجد هاني نفسه في ورطة أثناء محاولته إرشاد أحد الجمهور لمقعده", d:"ماكبث في عاصفة رعدية يحاول قتل دنكان ليصبح ملكًا"}},
+  23:{promptAr:"الرجل الذي في الممر كان في الحقيقة ……………", optionsAr:{a:"جنديًا حقيقيًا في جيش ماكبث", b:"يمثّل دورًا في المسرحية", c:"أحد الجمهور يبحث عن مقعده", d:"يؤدي دور ماكبث نفسه"}},
+  24:{promptAr:"لو كشف هاني سرّ مصير ماكبث ……………", optionsAr:{a:"لكان أنقذ دنكان", b:"لكانت المسرحية قد فسدت", c:"لكان ساعد ماكبث", d:"لكان الجمهور قد سعد"}},
+  25:{promptAr:"في المرة القادمة التي يذهب فيها هاني إلى المسرح، من المرجح أن ……………", optionsAr:{a:"يتجنب الجلوس بجانب مقعد في الممر", b:"يتخذ إجراءً لمساعدة الجمهور", c:"يكتشف أحداثًا مجهولة في المسرحية", d:"يتوقف عن التدخل أثناء المشاهدة"}},
+  26:{promptAr:"رغم مقاطعة هاني له، فإن الرجل الذي في الممر ……………", optionsAr:{a:"واصل الأداء أمام الجمهور", b:"قرر التنازل عن مقعده لهاني", c:"توقف عن التمثيل وغادر المسرح", d:"جلس بهدوء في مقعده بالممر"}},
+  27:{promptAr:"نتعلّم من القصة أن ……………", optionsAr:{a:"التمثيل مهنة مجزية يجب أن نمارسها جميعًا", b:"المواقف المحرجة تعلّمنا شيئًا", c:"نحتاج لتعلّم التمثيل لتجنب الإحراج", d:"التجمعات العائلية قد تسبب لنا المتاعب"}},
+
+  28:{promptAr:"أرادت الأم أن تعرف …………… لجعل المدرسة تطلب حضورها.", optionsAr:{a:"ماذا فعلتُ (تام - الصحيحة)", b:"إن كنتُ قد فعلت", c:"ماذا فعلتُ (مضارع تام خاطئ زمنيًا)", d:"هل فعلتُ"}},
+  29:{promptAr:"هل تعرف كيف تنشئ حساب بريد إلكتروني أم هل …………… ؟", optionsAr:{a:"عليك أن تصنع واحدًا", b:"تجعل شخصًا ينشئه", c:"تجعله يُصنع (تركيب خاطئ)", d:"أجعله يُنشأ لك (سببية صحيحة)"}},
+  30:{promptAr:"أي مما يلي تركيبه صحيح؟", optionsAr:{a:"بدون فواصل وعمر مفرد خاطئ", b:"بفواصل لكن مع أداة نكرة زائدة a", c:"بفواصل صحيحة وعمر جمع صحيح (الصحيحة)", d:"بدون فواصل ومع أداة نكرة زائدة"}},
+  31:{promptAr:"تمثال الملك المذهل الشكل …………… كل الزوار.", optionsAr:{a:"أعجب (مبني للمعلوم - خاطئ هنا)", b:"أُعجب به من قبل (مبني للمجهول - الصحيحة)", c:"كان قد أعجب", d:"يُعجب"}},
+  32:{promptAr:"عند كتابة بريد إلكتروني رسمي، لا يجب أن ……………", optionsAr:{a:"تذكر موضوع البريد مباشرة في العنوان", b:"تستخدم تحيات غير رسمية (خاطئ - يجب تجنبها)", c:"تعرّف بنفسك أو توضح علاقتك بالمستلم", d:"تراجع البريد قبل إرساله"}},
+  33:{promptAr:"…………… تستخدم هذا الحاسوب المحمول البطيء والقديم؟ توجد أجهزة أحدث متاحة.", optionsAr:{a:"هل يجب عليك (سؤال عادي)", b:"ألا بد أن تصر على (استنكار - الصحيحة)", c:"هل ينبغي عليك", d:"هل بإمكانك"}},
+  34:{promptAr:"الشرطي الصارم لا يسمح …………… .", optionsAr:{a:"بأن يُنتهك القانون (تركيب خاطئ)", b:"لأي شخص أن ينتهك (تركيب خاطئ)", c:"بانتهاك القانون (تركيب خاطئ)", d:"لأي شخص بانتهاك القانون (allow + مفعول + to - الصحيحة)"}},
+  35:{promptAr:"لم يُسجَّل أي ناجٍ في كارثة الانهيار الجليدي. لا بد أن كل المتسلقين …………… مدفونين تحت طبقات سميكة من الجليد.", optionsAr:{a:"لا بد (مبني للمعلوم خاطئ صياغيًا هنا)", b:"لا يُعقل أنهم كانوا (نفي الاستنتاج - خاطئ معنويًا)", c:"لا بد أنهم كانوا (استنتاج مؤكد مبني للمجهول - الصحيحة)", d:"لا يمكن (خاطئ معنويًا)"}},
+
+  40:{promptAr:"إلى أي مدى تعتقد أن انتقام إدموند من أعدائه عوّضه عن خسارته؟"},
+  41:{promptAr:"من في رأيك يستحق أشد عقاب أنزله إدموند؟ ولماذا؟"},
+  42:{promptAr:"يمكن أن تكون المدارس جذابة بأربع طرق."}
+};
+
+function getTranslation(id){
+  const dict = TRANSLATIONS[currentTest];
+  return dict ? (dict[id] || null) : null;
+}
+const TRANSLATIONS = { 1: TEST1_TRANSLATIONS, 2: TEST2_TRANSLATIONS };
+
+/* ============ RENDER ENGINE ============ */
+const testListEl = document.getElementById('testList');
+const contentEl = document.getElementById('content');
+let currentTest = 1;
+
+function renderSidebar(){
+  testListEl.innerHTML = '';
+  TESTS_META.forEach(t=>{
+    const btn = document.createElement('button');
+    btn.className = 'test-btn' + (t.id===currentTest?' active':'') + (!t.ready?' locked':'');
+    btn.innerHTML = `<span class="num">${t.id}</span><span class="test-label">${t.title}</span><span class="tag">${t.ready?'':'قريبًا'}</span>`;
+    btn.onclick = ()=>{ currentTest = t.id; renderSidebar(); renderTest(t.id); window.scrollTo({top:0,behavior:'smooth'}); if(window.innerWidth<=640){ closeMobileSidebar(); } };
+    testListEl.appendChild(btn);
+  });
+}
+
+function optionLetterArabicNote(letter){ return letter.toUpperCase(); }
+
+/* يقسّم القطعة إلى مقاطع (جمل) متطابقة العدد والترتيب بين الإنجليزي والعربي،
+   ويضع مباشرة أسفل كل مقطع إنجليزي المقطع العربي المقابل له (مخفي افتراضيًا حتى الضغط على "ترجمة القطعة")،
+   بحيث عند تظليل مقطع أثناء النطق يظهر الأصل وترجمته معًا في نفس المكان على الشاشة دون الحاجة للتمرير بينهما. */
+function buildPassageHTML(enText, arText, passageId){
+  const enSegs = enText.split(/\n+/).map(s=>s.trim()).filter(s=>s.length>0);
+  const arSegs = arText ? arText.split(/\n+/).map(s=>s.trim()).filter(s=>s.length>0) : [];
+  return enSegs.map((seg,i)=>{
+    const arLine = arSegs[i] ? `<div class="pseg pseg-ar-line" data-pid="${passageId}" data-lang="ar" data-idx="${i}">${arSegs[i]}</div>` : '';
+    return `<div class="pseg-block">
+      <span class="pseg pseg-en" data-pid="${passageId}" data-lang="en" data-idx="${i}">${seg}</span>
+      ${arLine}
+    </div>`;
+  }).join('');
+}
+
+function questionCardHTML(q, index){
+  const tr = getTranslation(q.id);
+  if(q.type==='mcq'){
+    const optsHTML = ['a','b','c','d'].map(k=>{
+      const trOpt = tr && tr.optionsAr ? tr.optionsAr[k] : null;
+      return `<div class="opt" data-letter="${k}" id="opt-${q.id}-${k}" onclick="selectAnswer(${q.id}, '${k}', this)">
+        <span class="opt-click">
+          <span class="lab">${k})</span>
+          <span class="opt-body">
+            <span class="eng">${q.options[k]}</span>
+            ${trOpt ? `<button class="mini-tr-btn" onclick="event.stopPropagation(); toggleTr('optTr-${q.id}-${k}', this)">🌐</button>
+            <div class="opt-ar" id="optTr-${q.id}-${k}">${trOpt}</div>` : ''}
+          </span>
+        </span>
+        <button class="opt-speak" onclick="event.stopPropagation(); speakOption(${q.id}, '${k}', this)" aria-label="نطق هذا الاختيار">🔊</button>
+      </div>`;
+    }).join('');
+    return `
+    <div class="card open" id="qcard-${q.id}">
+      <div class="card-head">
+        <div class="qnum">${q.id}</div>
+        <div class="qtitle-wrap" onclick="toggleCard(${q.id})">
+          <div class="qtitle eng">${q.prompt}</div>
+          <div class="chev">▾</div>
+        </div>
+      </div>
+      <div class="quick-tools">
+        <button class="tool-btn" onclick="speakQuestionOnly(${q.id}, this)">🔊 نطق السؤال فقط</button>
+        ${tr ? `<button class="tool-btn" onclick="toggleTr('promptTr-${q.id}', this)">🌐 ترجمة السؤال</button>` : ''}
+      </div>
+      ${tr ? `<div class="prompt-ar" id="promptTr-${q.id}">${tr.promptAr}</div>` : ''}
+      <div class="card-body">
+        <div class="options">${optsHTML}</div>
+        <button class="reveal-btn" onclick="revealAnswer(${q.id})">✅ إظهار الإجابة الصحيحة والشرح</button>
+        <div class="answer-box" id="ans-${q.id}">
+          <div class="correct-line">الإجابة الصحيحة: (${q.correct}) <span class="eng">${q.options[q.correct]}</span></div>
+          <div class="explain" id="explaintext-${q.id}">${q.explain}</div>
+          <div class="speak-row">
+            <button class="speak-btn" onclick="speakFull(${q.id}, this)">🔊 استمع لكل شيء (السؤال + الاختيارات + الإجابة + الشرح)</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+  if(q.type==='translate'){
+    const dirClass = q.dirType==='en' ? 'eng' : '';
+    const optsHTML = ['a','b','c','d'].map(k=>{
+      return `<div class="opt" data-letter="${k}" id="opt-${q.id}-${k}" onclick="selectAnswer(${q.id}, '${k}', this)">
+        <span class="opt-click">
+          <span class="lab">${k})</span>
+          <span class="${q.dirType==='en'?'eng':''}">${q.options[k]}</span>
+        </span>
+        <button class="opt-speak" onclick="event.stopPropagation(); speakOption(${q.id}, '${k}', this)" aria-label="نطق هذا الاختيار">🔊</button>
+      </div>`;
+    }).join('');
+    return `
+    <div class="card open" id="qcard-${q.id}">
+      <div class="card-head">
+        <div class="qnum">${q.id}</div>
+        <div class="qtitle-wrap" onclick="toggleCard(${q.id})">
+          <div class="qtitle ${q.dirType==='en'?'':'eng'}">${q.prompt}</div>
+          <div class="chev">▾</div>
+        </div>
+      </div>
+      <div class="quick-tools">
+        <button class="tool-btn" onclick="speakQuestionOnly(${q.id}, this)">🔊 نطق السؤال فقط</button>
+      </div>
+      <div class="card-body">
+        <div class="options">${optsHTML}</div>
+        <button class="reveal-btn" onclick="revealAnswer(${q.id})">✅ إظهار الترجمة الصحيحة والشرح</button>
+        <div class="answer-box" id="ans-${q.id}">
+          <div class="correct-line">الترجمة الصحيحة: (${q.correct})</div>
+          <div class="explain" id="explaintext-${q.id}">${q.explain}</div>
+          <div class="speak-row">
+            <button class="speak-btn" onclick="speakFull(${q.id}, this)">🔊 استمع لكل شيء (السؤال + الاختيارات + الإجابة + الشرح)</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+  if(q.type==='essay' || q.type==='essay5'){
+    return `
+    <div class="card open" id="qcard-${q.id}">
+      <div class="card-head">
+        <div class="qnum">${q.id}</div>
+        <div class="qtitle-wrap" onclick="toggleCard(${q.id})">
+          <div class="qtitle eng">${q.prompt}</div>
+          <div class="chev">▾</div>
+        </div>
+      </div>
+      <div class="quick-tools">
+        <button class="tool-btn" onclick="speakQuestionOnly(${q.id}, this)">🔊 نطق السؤال</button>
+        ${tr ? `<button class="tool-btn" onclick="toggleTr('promptTr-${q.id}', this)">🌐 ترجمة السؤال</button>` : ''}
+      </div>
+      ${tr ? `<div class="prompt-ar" id="promptTr-${q.id}">${tr.promptAr}</div>` : ''}
+      <div class="card-body">
+        <button class="reveal-btn" onclick="revealAnswer(${q.id})">✍️ إظهار الإجابة النموذجية</button>
+        <div class="answer-box" id="ans-${q.id}">
+          <div class="correct-line">إجابة نموذجية:</div>
+          <div class="model-answer eng">${q.model}</div>
+          ${q.modelAr ? `<button class="tool-btn" style="margin-top:8px;" onclick="toggleTr('modelTr-${q.id}', this)">🌐 ترجمة الإجابة النموذجية</button>
+          <div class="prompt-ar" id="modelTr-${q.id}">${q.modelAr}</div>` : ''}
+          <div class="explain" style="margin-top:10px;" id="explaintext-${q.id}">${q.explain}</div>
+          <div class="speak-row">
+            <button class="speak-btn" onclick="speakFull(${q.id}, this)">🔊 استمع لكل شيء (السؤال + الإجابة النموذجية + الشرح)</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+  return '';
+}
+
+function renderTest(id){
+  const meta = TESTS_META.find(t=>t.id===id);
+  if(!meta.ready){
+    contentEl.innerHTML = `
+      <div class="test-header"><h2>${meta.title}</h2><p>هذا النموذج قيد المراجعة الدقيقة حاليًا وسيُضاف قريبًا بنفس مستوى الجودة والدقة.</p></div>
+      <div class="pending-wrap"><div class="big">📘⏳</div><div>جاري تجهيز أسئلة وإجابات وشروحات ${meta.title} بعناية فائقة...</div></div>`;
+    return;
+  }
+  const data = TESTS_DATA[id];
+  let html = `<div class="test-header"><h2>${meta.title}</h2><p>اضغط على أي سؤال لعرضه، ثم اضغط "إظهار الإجابة" لمشاهدة الحل والشرح العربي، ويمكنك الاستماع للشرح صوتيًا.</p></div>`;
+
+  let shownPassages = new Set();
+  data.questions.forEach(q=>{
+    if(q.passageId && !shownPassages.has(q.passageId)){
+      shownPassages.add(q.passageId);
+      const ptext = data.passages[q.passageId];
+      const ptextAr = data.passagesAr ? data.passagesAr[q.passageId] : null;
+      const passageHTML = buildPassageHTML(ptext, ptextAr, q.passageId);
+      html += `
+      <div class="card passage-card open" id="pcard-${q.passageId}">
+        <div class="card-head" onclick="toggleCard('${q.passageId}', true)">
+          <div class="qnum">📖</div>
+          <div class="qtitle">القطعة المطلوب قراءتها للأسئلة التالية</div>
+          <div class="chev">▾</div>
+        </div>
+        <div class="card-body">
+          ${ptextAr ? `<div class="quick-tools" style="padding:0 0 10px;">
+            <button class="tool-btn tr-toggle-btn" data-pid="${q.passageId}" onclick="togglePassageAr('${q.passageId}', this)">🌐 ترجمة القطعة</button>
+          </div>` : ''}
+          <div class="passage-text eng" id="ptext-${q.passageId}">${passageHTML}</div>
+          <div class="speak-row">
+            <button class="speak-btn" onclick="speakPassage('${q.passageId}', true, this)">🔊 استماع للقطعة (إنجليزي)</button>
+            ${ptextAr ? `<button class="speak-btn" onclick="speakPassage('${q.passageId}', false, this)">🔊 استماع للترجمة (عربي)</button>` : ''}
+          </div>
+        </div>
+      </div>`;
+    }
+    html += questionCardHTML(q);
+  });
+  contentEl.innerHTML = html;
+}
+
+function toggleCard(id, isPassage){
+  const el = document.getElementById((isPassage? 'pcard-':'qcard-')+id);
+  el.classList.toggle('open');
+}
+
+function revealAnswer(id){
+  const box = document.getElementById('ans-'+id);
+  const card = document.getElementById('qcard-'+id);
+  const q = findQuestion(id);
+  const wasAlreadyAnswered = card.dataset.answered==='1';
+  box.classList.add('show');
+  if(q && q.options){
+    card.querySelectorAll('.opt').forEach(optEl=>{
+      const letter = optEl.getAttribute('data-letter');
+      if(letter===q.correct) optEl.classList.add('correct');
+      else optEl.classList.add('wrong-marked');
+    });
+  }
+  card.dataset.answered = '1';
+  if(!wasAlreadyAnswered) playSuccessSound();
+  box.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function findQuestion(id){
+  const cur = TESTS_DATA[currentTest];
+  if(cur){
+    const f = cur.questions.find(q=>q.id===id);
+    if(f) return f;
+  }
+  for(const key in TESTS_DATA){
+    const found = TESTS_DATA[key].questions.find(q=>q.id===id);
+    if(found) return found;
+  }
+  return null;
+}
+
+/* ============ TEXT TO SPEECH ============ */
+let currentUtterance = null;
+const rateSlider = document.getElementById('rateSlider');
+const rateVal = document.getElementById('rateVal');
+const voiceSelect = document.getElementById('voiceSelect');
+
+rateSlider.addEventListener('input', ()=>{ rateVal.textContent = rateSlider.value + 'x'; });
+
+function loadVoices(){
+  const voices = speechSynthesis.getVoices();
+  voiceSelect.innerHTML = '';
+  const arabicVoices = voices.filter(v=>v.lang && v.lang.toLowerCase().startsWith('ar'));
+  const list = arabicVoices.length ? arabicVoices : voices;
+  list.forEach((v,i)=>{
+    const opt = document.createElement('option');
+    opt.value = v.name; opt.textContent = v.name + ' (' + v.lang + ')';
+    voiceSelect.appendChild(opt);
+  });
+  if(list.length===0){
+    const opt=document.createElement('option'); opt.textContent='الصوت الافتراضي للجهاز'; voiceSelect.appendChild(opt);
+  }
+}
+speechSynthesis.onvoiceschanged = loadVoices;
+loadVoices();
+
+function resetAllSpeakButtons(){
+  document.querySelectorAll('.speak-btn, .tool-btn').forEach(b=>{
+    b.classList.remove('stop');
+    if(b.dataset.orig) b.textContent = b.dataset.orig;
+  });
+  passagePlayback.token++;
+  clearPassageHighlight();
+}
+
+function toggleTr(elId, btn){
+  const el = document.getElementById(elId);
+  el.classList.toggle('show');
+}
+
+/* يُظهر/يُخفي كل أسطر الترجمة العربية لقطعة معينة دفعة واحدة (كل سطر ترجمة تحت جملته الإنجليزية مباشرة) */
+function togglePassageAr(passageId, btn){
+  const isShowing = btn.classList.toggle('active-tr');
+  document.querySelectorAll(`.pseg-ar-line[data-pid="${passageId}"]`).forEach(el=> el.classList.toggle('show', isShowing));
+}
+
+/* يضمن ظهور الترجمة العربية لقطعة معينة (يُستخدم تلقائيًا عند تشغيل نطق الترجمة العربية) */
+function ensurePassageArVisible(passageId){
+  document.querySelectorAll(`.pseg-ar-line[data-pid="${passageId}"]`).forEach(el=> el.classList.add('show'));
+  const trBtn = document.querySelector(`.tr-toggle-btn[data-pid="${passageId}"]`);
+  if(trBtn) trBtn.classList.add('active-tr');
+}
+
+/* نطق نص السؤال (الجذع) فقط، دون الاختيارات - كل اختيار له زر نطق مستقل بجانبه */
+function speakQuestionOnly(id, btn){
+  const alreadyPlaying = btn.classList.contains('stop');
+  speechSynthesis.cancel();
+  resetAllSpeakButtons();
+  clearOptionGlow();
+  if(alreadyPlaying) return; // كان يعمل بالفعل -> إيقاف فقط، بدون إعادة تشغيل
+  const q = findQuestion(id);
+  if(!q) return;
+  let lang = 'en';
+  if(q.type==='translate'){ lang = q.dirType==='ar' ? 'en' : 'ar'; }
+  const utter = makeUtterance(q.prompt, lang);
+  if(!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  btn.classList.add('stop');
+  btn.textContent = '⏹ إيقاف';
+  utter.onend = ()=>{ btn.classList.remove('stop'); btn.textContent = btn.dataset.orig; };
+  speechSynthesis.speak(utter);
+}
+
+/* نطق اختيار واحد بمفرده، ويُضيء (يتوهج) الاختيار أثناء نطقه */
+function speakOption(id, letter, btn){
+  const q = findQuestion(id);
+  if(!q) return;
+  speechSynthesis.cancel();
+  resetAllSpeakButtons();
+  clearOptionGlow();
+  let lang = 'en';
+  if(q.type==='translate'){ lang = q.dirType==='ar' ? 'ar' : 'en'; }
+  const optEl = document.getElementById('opt-'+id+'-'+letter);
+  if(optEl) optEl.classList.add('opt-glow');
+  btn.classList.add('playing');
+  const utter = makeUtterance(q.options[letter], lang);
+  utter.onend = ()=>{
+    btn.classList.remove('playing');
+    if(optEl) optEl.classList.remove('opt-glow');
+  };
+  speechSynthesis.speak(utter);
+}
+
+function clearOptionGlow(){
+  document.querySelectorAll('.opt.opt-glow').forEach(o=>o.classList.remove('opt-glow'));
+  document.querySelectorAll('.opt-speak.playing').forEach(b=>b.classList.remove('playing'));
+}
+
+/* ============ التفاعل: اختيار إجابة بالنقر مباشرة على الاختيار ============ */
+function selectAnswer(id, letter, el){
+  const q = findQuestion(id);
+  if(!q || !q.correct) return;
+  const card = document.getElementById('qcard-'+id);
+  if(card.dataset.answered==='1') return;
+  if(letter === q.correct){
+    card.dataset.answered = '1';
+    playSuccessSound();
+    burstConfetti(el);
+    dropBadge(el, '🎉');
+    revealAnswer(id);
+  } else {
+    el.classList.add('shake-wrong');
+    playWrongSound();
+    setTimeout(()=> el.classList.remove('shake-wrong'), 500);
+  }
+}
+
+/* ============ أصوات تفاعلية وتأثيرات احتفالية (بدون إنترنت - Web Audio) ============ */
+let audioCtx = null;
+function getAudioCtx(){
+  if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state==='suspended') audioCtx.resume();
+  return audioCtx;
+}
+function playTone(freq, start, dur, type, peak){
+  try{
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type||'sine'; osc.frequency.value = freq;
+    osc.connect(gain); gain.connect(ctx.destination);
+    const t0 = ctx.currentTime + start;
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.linearRampToValueAtTime(peak||0.22, t0+0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, t0+dur);
+    osc.start(t0); osc.stop(t0+dur+0.03);
+  }catch(e){}
+}
+function playSuccessSound(){
+  playTone(523.25, 0.00, 0.16, 'triangle', 0.22);
+  playTone(659.25, 0.09, 0.16, 'triangle', 0.22);
+  playTone(783.99, 0.18, 0.20, 'triangle', 0.24);
+  playTone(1046.5, 0.30, 0.34, 'triangle', 0.26);
+}
+function playWrongSound(){
+  playTone(220, 0.00, 0.14, 'sawtooth', 0.14);
+  playTone(174, 0.10, 0.20, 'sawtooth', 0.14);
+}
+function burstConfetti(anchorEl){
+  const rect = anchorEl.getBoundingClientRect();
+  const colors = ['#c99a3f','#2f7d5b','#e8c579','#1f3b63','#b5453a'];
+  for(let i=0;i<22;i++){
+    const p = document.createElement('span');
+    p.className = 'confetti-piece';
+    p.style.left = (rect.left + rect.width*Math.random())+'px';
+    p.style.top = (rect.top + rect.height/2)+'px';
+    p.style.background = colors[i%colors.length];
+    const dx = (Math.random()-0.5)*180;
+    const dy = -(Math.random()*130+70);
+    p.style.setProperty('--dx', dx+'px');
+    p.style.setProperty('--dy', dy+'px');
+    p.style.setProperty('--rot', (Math.random()*360)+'deg');
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(), 900);
+  }
+}
+function dropBadge(anchorEl, emoji){
+  const rect = anchorEl.getBoundingClientRect();
+  const b = document.createElement('div');
+  b.className = 'correct-badge';
+  b.textContent = emoji;
+  b.style.left = (rect.left + rect.width - 20)+'px';
+  b.style.top = (rect.top - 6)+'px';
+  document.body.appendChild(b);
+  setTimeout(()=> b.remove(), 1050);
+}
+
+function makeUtterance(text, lang){
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.rate = parseFloat(rateSlider.value);
+  utter.lang = lang==='en' ? 'en-US' : 'ar-SA';
+  const voices = speechSynthesis.getVoices();
+  const chosenName = voiceSelect.value;
+  let voice = null;
+  if(lang!=='en'){ voice = voices.find(v=>v.name===chosenName); }
+  if(!voice){ voice = voices.find(v=> v.lang && v.lang.toLowerCase().startsWith(lang)); }
+  if(voice) utter.voice = voice;
+  return utter;
+}
+
+/* ============ نطق القطعة مقطعًا مقطعًا مع تظليل تفاعلي للترجمة ============ */
+let passagePlayback = { token: 0 };
+
+function clearPassageHighlight(){
+  document.querySelectorAll('.pseg.active').forEach(el=>el.classList.remove('active'));
+}
+
+/* ينطق نص القطعة (إنجليزي أو عربي) مقطعًا (سطرًا/جملة) تلو الآخر،
+   ويظلّل المقطع الجاري نطقه في كلتا اللغتين معًا (الأصل + الترجمة) بحيث تتفاعل الترجمة مع النطق.
+   الضغط على الزر مرة ثانية أثناء التشغيل يوقف النطق فعليًا بدلاً من إعادة تشغيله. */
+function speakPassage(passageId, isEnglish, btn){
+  const alreadyPlaying = btn.classList.contains('stop');
+  speechSynthesis.cancel();
+  resetAllSpeakButtons();
+  if(alreadyPlaying) return; // كان يعمل بالفعل -> إيقاف فقط، بدون إعادة تشغيل
+
+  const lang = isEnglish ? 'en' : 'ar';
+  if(!isEnglish) ensurePassageArVisible(passageId);
+  const segEls = Array.from(document.querySelectorAll(`.pseg[data-pid="${passageId}"][data-lang="${lang}"]`))
+    .sort((a,b)=> (+a.dataset.idx) - (+b.dataset.idx));
+  if(segEls.length===0) return;
+
+  const myToken = passagePlayback.token;
+  if(!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  btn.classList.add('stop');
+  btn.textContent = '⏹ إيقاف النطق';
+
+  let i = 0;
+  function playNext(){
+    if(myToken !== passagePlayback.token) return; // تم إيقافه أو بدأ نطق آخر
+    if(i >= segEls.length){
+      btn.classList.remove('stop');
+      btn.textContent = btn.dataset.orig;
+      clearPassageHighlight();
+      return;
+    }
+    clearPassageHighlight();
+    document.querySelectorAll(`.pseg[data-pid="${passageId}"][data-idx="${i}"]`).forEach(el=> el.classList.add('active'));
+    const activeSeg = segEls[i];
+    activeSeg.scrollIntoView({behavior:'smooth', block:'center'});
+    const utter = makeUtterance(activeSeg.textContent, lang);
+    utter.onend = ()=>{ if(myToken===passagePlayback.token){ i++; playNext(); } };
+    utter.onerror = ()=>{ if(myToken===passagePlayback.token){ i++; playNext(); } };
+    speechSynthesis.speak(utter);
+  }
+  playNext();
+}
+
+/* يقرأ السؤال كاملاً: النص + الاختيارات + الإجابة الصحيحة + الشرح، بالتبديل التلقائي بين العربي والإنجليزي */
+function speakFull(id, btn){
+  const alreadyPlaying = btn.classList.contains('stop');
+  speechSynthesis.cancel();
+  resetAllSpeakButtons();
+  if(alreadyPlaying) return; // كان يعمل بالفعل -> إيقاف فقط، بدون إعادة تشغيل
+
+  const q = findQuestion(id);
+  if(!q) return;
+
+  let parts = [];
+  if(q.type==='mcq'){
+    parts.push({text:q.prompt, lang:'en'});
+    ['a','b','c','d'].forEach(k=> parts.push({text:k+') '+q.options[k], lang:'en'}));
+    parts.push({text:'الإجابة الصحيحة هي: '+q.correct, lang:'ar'});
+    parts.push({text:q.options[q.correct], lang:'en'});
+    parts.push({text:q.explain, lang:'ar'});
+  } else if(q.type==='translate'){
+    const promptLang = q.dirType==='ar' ? 'en' : 'ar';
+    const optLang = q.dirType==='ar' ? 'ar' : 'en';
+    parts.push({text:q.prompt, lang:promptLang});
+    ['a','b','c','d'].forEach(k=> parts.push({text:k+') '+q.options[k], lang:optLang}));
+    parts.push({text:'الترجمة الصحيحة هي: '+q.correct, lang:'ar'});
+    parts.push({text:q.explain, lang:'ar'});
+  } else if(q.type==='essay' || q.type==='essay5'){
+    parts.push({text:q.prompt, lang:'en'});
+    parts.push({text:'الإجابة النموذجية', lang:'ar'});
+    parts.push({text:q.model, lang:'en'});
+    parts.push({text:q.explain, lang:'ar'});
+  }
+
+  if(!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+  btn.classList.add('stop');
+  btn.textContent = '⏹ إيقاف النطق';
+
+  parts.forEach((p, idx)=>{
+    const utter = makeUtterance(p.text, p.lang);
+    if(idx===parts.length-1){
+      utter.onend = ()=>{ btn.classList.remove('stop'); btn.textContent = btn.dataset.orig; };
+    }
+    speechSynthesis.speak(utter);
+  });
+  currentUtterance = true;
+}
+
+document.getElementById('stopSpeak').onclick = ()=>{
+  speechSynthesis.cancel();
+  resetAllSpeakButtons();
+};
+
+/* ============ UI CONTROLS ============ */
+const sidebarEl = document.getElementById('sidebar');
+const backdropEl = document.getElementById('backdrop');
+function isMobile(){ return window.innerWidth <= 640; }
+
+function closeMobileSidebar(){
+  sidebarEl.classList.remove('mobile-open');
+  backdropEl.classList.remove('show');
+}
+function openMobileSidebar(){
+  sidebarEl.classList.add('mobile-open');
+  backdropEl.classList.add('show');
+}
+
+document.getElementById('sidebarToggle').onclick = ()=>{
+  if(isMobile()){
+    if(sidebarEl.classList.contains('mobile-open')) closeMobileSidebar();
+    else openMobileSidebar();
+  } else {
+    sidebarEl.classList.toggle('collapsed');
+  }
+};
+backdropEl.onclick = closeMobileSidebar;
+
+document.getElementById('fullscreenBtn').onclick = ()=>{
+  if(!document.fullscreenElement){ document.documentElement.requestFullscreen().catch(()=>{}); }
+  else{ document.exitFullscreen(); }
+};
+document.getElementById('expandAll').onclick = ()=>{
+  document.querySelectorAll('.card').forEach(c=>c.classList.add('open'));
+};
+document.getElementById('collapseAll').onclick = ()=>{
+  document.querySelectorAll('.card').forEach(c=>c.classList.remove('open'));
+};
+
+/* ============ INIT ============ */
+renderSidebar();
+renderTest(1);
+</script>
+</body>
+</html>
